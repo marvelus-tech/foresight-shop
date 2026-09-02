@@ -44,15 +44,65 @@
     return Date.now();
   }
 
+  var rev = 0;
+  var tabId = Math.random().toString(36).slice(2, 10);
+  var applyingRemote = false;
+  var channel = null;
+  try { channel = new BroadcastChannel("foresight-shop"); } catch (err) { channel = null; }
+
+  function snapshot() {
+    return {
+      rev: rev,
+      tabId: tabId,
+      stock: Object.fromEntries(products.map(function (p) { return [p.id, p.stock]; })),
+      cart: cart,
+      restockAt: restockAt,
+      orderSeq: orderSeq
+    };
+  }
+
   function persist() {
+    if (!applyingRemote) rev += 1;
+    var snap = snapshot();
     try {
-      global.localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        stock: Object.fromEntries(products.map(function (p) { return [p.id, p.stock]; })),
-        cart: cart,
-        restockAt: restockAt,
-        orderSeq: orderSeq
-      }));
+      global.localStorage.setItem(STORAGE_KEY, JSON.stringify(snap));
     } catch (err) { /* private mode */ }
+    if (!applyingRemote && channel) {
+      try { channel.postMessage(snap); } catch (err) { /* ignore */ }
+    }
+  }
+
+  function applyRemote(saved) {
+    if (!saved || !saved.stock || saved.tabId === tabId) return false;
+    if (typeof saved.rev === "number" && saved.rev <= rev) return false;
+    applyingRemote = true;
+    if (typeof saved.rev === "number") rev = saved.rev;
+    var changed = [];
+    products.forEach(function (p) {
+      if (typeof saved.stock[p.id] !== "number") return;
+      var next = Math.max(0, Math.floor(saved.stock[p.id]));
+      if (next === p.stock) return;
+      changed.push({ sku: p.id, name: p.name, from: p.stock, to: next });
+      p.stock = next;
+      if (p.stock === 0) scheduleRestock(p, true);
+      else cancelRestock(p.id);
+    });
+    if (saved.restockAt && typeof saved.restockAt === "object") restockAt = saved.restockAt;
+    if (typeof saved.orderSeq === "number") orderSeq = saved.orderSeq;
+    applyingRemote = false;
+    if (changed.length) emit("remote", { changed: changed });
+    else emit("remote", { changed: [] });
+    return changed.length > 0;
+  }
+
+  function startSync() {
+    if (channel) {
+      channel.onmessage = function (e) { applyRemote(e.data); };
+    }
+    global.addEventListener("storage", function (e) {
+      if (e.key !== STORAGE_KEY || !e.newValue) return;
+      try { applyRemote(JSON.parse(e.newValue)); } catch (err) { /* ignore */ }
+    });
   }
 
   function emit(reason, extra) {
@@ -389,6 +439,7 @@
           restockAt = saved.restockAt;
         }
         if (saved && typeof saved.orderSeq === "number") orderSeq = saved.orderSeq;
+        if (saved && typeof saved.rev === "number") rev = saved.rev;
       }
     } catch (err) { /* ignore */ }
     products.forEach(function (p) {
@@ -426,6 +477,7 @@
       })
       .then(function () {
         startTick();
+        startSync();
         emit("init", {});
         return shop;
       });

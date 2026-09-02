@@ -918,3 +918,13 @@ body.agent-open {
     transition: none !important;
   }
 }
+
+.live-sale {
+  grid-column: 1 / -1;
+  min-height: 1.25em;
+  margin: 0.15rem 0 0;
+  color: var(--rust);
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+}
+.live-sale:empty { display: none; }

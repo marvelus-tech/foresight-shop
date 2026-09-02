@@ -260,12 +260,27 @@
       toast("Demo reset", "ok");
     }
     if (d.reason === "buy" || d.reason === "checkout") {
-      var result = d;
       if (d.items && d.items.length) {
         lastReceipt = { ok: true, order_id: d.order_id, total: d.total };
       }
       renderBag();
+      setLiveSale(d.name || (d.items && d.items[0] && d.items[0].name), d.qty || (d.items && d.items[0] && d.items[0].qty) || 1);
     }
+    if (d.reason === "remote" && d.changed && d.changed.length) {
+      d.changed.forEach(function (c) {
+        highlightCard(c.sku);
+        if (c.to < c.from) toast(c.name + " sold on another tab", "ok");
+        else if (c.to > c.from) toast("Shipment in" + (c.name ? ": " + c.name : ""), "ship");
+      });
+      var drop = d.changed.filter(function (c) { return c.to < c.from; })[0];
+      if (drop) setLiveSale(drop.name, drop.from - drop.to);
+    }
+  }
+
+  function setLiveSale(name, qty) {
+    var el = $("live-sale");
+    if (!el || !name) return;
+    el.textContent = "Just sold: " + qty + " × " + name;
   }
 
   function bind() {

@@ -6,7 +6,7 @@ A small shop. The shelf restocks itself.
 
 Paste this page into your own agent. The page registers tools on `document.modelContext`. GitHub Pages loads the official [WebMCP polyfill](https://github.com/GoogleChromeLabs/webmcp-tools/blob/main/demos/shared/webmcp-polyfill.js) (Apache-2.0, Google LLC) so tools work without the Chrome flag. The polyfill no-ops when native WebMCP is present. The on-page Agent panel uses `document.modelContext.getTools` + `executeTool` (same pattern as [Page Agent](https://googlechromelabs.github.io/webmcp-tools/demos/page-agent/)); no Gemini API key.
 
-Inventory is per-browser, not shared across visitors. This is a sim.
+Open two tabs of this shop. A buy in one tab updates the other immediately (BroadcastChannel + localStorage). This is still a sim: other visitors on other devices do not share stock until a hosted shelf API is connected.
 
 ## 60-second demo
 
