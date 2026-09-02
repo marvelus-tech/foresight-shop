@@ -68,32 +68,59 @@
     setTimeout(function () { badge.classList.remove("is-tick"); }, 180);
   }
 
-  var hitTimers = {};
+  var pendingHits = {};
 
   function highlightCard(sku, opts) {
     if (!sku) return;
     opts = opts || {};
-    var card = document.querySelector('.card[data-sku="' + sku.replace(/"/g, "") + '"]');
+    pendingHits[sku] = {
+      hit: opts.hit !== false,
+      until: Date.now() + 1450,
+      token: Math.random().toString(36).slice(2)
+    };
+    paintHit(sku, { scroll: opts.scroll !== false, restart: true });
+  }
+
+  function paintHit(sku, opts) {
+    opts = opts || {};
+    var rec = pendingHits[sku];
+    if (!rec || rec.until <= Date.now()) {
+      delete pendingHits[sku];
+      return;
+    }
+    var card = document.querySelector('.card[data-sku="' + String(sku).replace(/"/g, "") + '"]');
     if (!card) return;
-    var hit = opts.hit !== false;
-    card.classList.remove("is-hot", "is-hit");
     var count = card.querySelector(".stock .count");
-    if (count) count.classList.remove("is-pop");
-    void card.offsetWidth;
-    if (hit) {
+    if (opts.restart) {
+      card.classList.remove("is-hot", "is-hit");
+      if (count) count.classList.remove("is-pop");
+      card.style.setProperty("--hit-a", "0deg");
+      void card.offsetWidth;
+    }
+    if (rec.hit) {
       card.classList.add("is-hit");
       card.classList.add("is-hot");
     }
-    if (count) count.classList.add("is-pop");
-    if (!reduceMotion && opts.scroll !== false) {
+    if (count && opts.restart) count.classList.add("is-pop");
+    else if (count && rec.hit) count.classList.add("is-pop");
+    if (opts.restart && !reduceMotion && opts.scroll) {
       try { card.scrollIntoView({ block: "nearest", behavior: "smooth" }); }
       catch (err) { card.scrollIntoView(); }
     }
-    clearTimeout(hitTimers[sku]);
-    hitTimers[sku] = setTimeout(function () {
+    clearTimeout(rec.timer);
+    rec.timer = setTimeout(function () {
+      var live = pendingHits[sku];
+      if (!live || live.token !== rec.token) return;
+      delete pendingHits[sku];
       card.classList.remove("is-hot", "is-hit");
       if (count) count.classList.remove("is-pop");
-    }, 1450);
+    }, Math.max(0, rec.until - Date.now()));
+  }
+
+  function paintPendingHits() {
+    Object.keys(pendingHits).forEach(function (sku) {
+      paintHit(sku, { restart: false, scroll: false });
+    });
   }
 
   function renderBadge() {
@@ -210,6 +237,7 @@
     renderBadge();
     renderBag();
     ensureCountdown();
+    paintPendingHits();
   }
 
   function ensureCountdown() {
@@ -253,6 +281,7 @@
 
   function onShopChange(e) {
     var d = e.detail || {};
+    if (d.reason === "remote" && (!d.changed || !d.changed.length)) return;
     render();
     if (d.reason === "buy" && d.order_id) {
       lastReceipt = { ok: true, order_id: d.order_id, total: d.total };

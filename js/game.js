@@ -98,7 +98,6 @@
     if (typeof saved.orderSeq === "number") orderSeq = saved.orderSeq;
     applyingRemote = false;
     if (changed.length) emit("remote", { changed: changed });
-    else emit("remote", { changed: [] });
     return changed.length > 0;
   }
 
