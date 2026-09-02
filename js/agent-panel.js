@@ -148,11 +148,16 @@
   }
 
   function agentPrompt() {
+    var shopUrl = document.location.href.split("#")[0];
+    var api = (global.ForesightCloud && typeof global.ForesightCloud.url === "function" && global.ForesightCloud.url()) || "https://foresight-shop.marvelus.workers.dev";
     return (
-      "You are shopping on my behalf at " + document.location.href +
-      ". The page exposes WebMCP tools (list_products, get_product, add_to_cart, checkout, buy_item, get_shop_status). " +
-      "If you can use WebMCP / page tools, buy one \"Signal Mug\" and confirm stock changed. " +
-      "If you cannot call WebMCP, tell me what you would call."
+      "Buy one Signal Mug from the shared Foresight shop. You do not need to be bound to the browser tab.\n\n" +
+      "Shop (keep this open on screen): " + shopUrl + "\n" +
+      "Shared inventory API: " + api + "\n\n" +
+      "1. GET " + api + "/state and note Signal Mug stock.\n" +
+      "2. POST " + api + "/buy with header Content-Type: application/json and body {\"sku\":\"signal-mug\",\"qty\":1}\n" +
+      "3. Confirm remaining dropped. The open shop tab should update within about 2 seconds.\n\n" +
+      "If you can call WebMCP / page tools instead, use buy_item with sku signal-mug and qty 1."
     );
   }
 

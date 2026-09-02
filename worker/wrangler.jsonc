@@ -1,0 +1,11 @@
+{
+  "name": "foresight-shop",
+  "main": "index.js",
+  "compatibility_date": "2026-09-01",
+  "kv_namespaces": [
+    {
+      "binding": "STOCK",
+      "id": "fbafe63dfb6f4f9c930d917615b3e4f9"
+    }
+  ]
+}

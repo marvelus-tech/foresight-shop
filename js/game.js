@@ -74,7 +74,8 @@
 
   function applyRemote(saved) {
     if (!saved || !saved.stock || saved.tabId === tabId) return false;
-    if (typeof saved.rev === "number" && saved.rev <= rev) return false;
+    var fromCloud = saved.tabId === "cloud";
+    if (!fromCloud && typeof saved.rev === "number" && saved.rev <= rev) return false;
     applyingRemote = true;
     if (typeof saved.rev === "number") rev = saved.rev;
     var changed = [];
@@ -83,9 +84,15 @@
       var next = Math.max(0, Math.floor(saved.stock[p.id]));
       if (next === p.stock) return;
       changed.push({ sku: p.id, name: p.name, from: p.stock, to: next });
+      var prev = p.stock;
       p.stock = next;
-      if (p.stock === 0) scheduleRestock(p, true);
-      else cancelRestock(p.id);
+      if (p.stock === 0) {
+        if (fromCloud) cancelRestock(p.id);
+        else scheduleRestock(p, true);
+      } else {
+        cancelRestock(p.id);
+        if (fromCloud && prev === 0) markNewStock(p.id);
+      }
     });
     if (saved.restockAt && typeof saved.restockAt === "object") restockAt = saved.restockAt;
     if (typeof saved.orderSeq === "number") orderSeq = saved.orderSeq;
@@ -394,6 +401,13 @@
         }),
         cart_count: cartView().count
       };
+    },
+
+    applyRemote: applyRemote,
+
+    pauseLocalSim: function () {
+      clearInterval(tickTimer);
+      tickTimer = null;
     },
 
     reset: function () {

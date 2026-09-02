@@ -28,10 +28,10 @@
   </header>
 
   <ol class="howto" aria-label="How to try this">
-    <li><span class="n">1</span> Keep this tab open (open a second tab to watch it live)</li>
-    <li><span class="n">2</span> Click Agent on this page, or use WebMCP in Chrome</li>
-    <li><span class="n">3</span> Type buy 1 signal-mug</li>
-    <li><span class="n">4</span> Watch the shelf move in every open tab</li>
+    <li><span class="n">1</span> Keep this tab open</li>
+    <li><span class="n">2</span> Copy the Agent prompt, or POST to the shared shelf API</li>
+    <li><span class="n">3</span> Buy one Signal Mug from any agent</li>
+    <li><span class="n">4</span> Watch stock drop here, even if the agent is in another window</li>
   </ol>
 
   <main>
@@ -54,7 +54,7 @@
     <div class="fold-body">
       <p>Bring your own agent. This page registers shop tools on <code>document.modelContext</code> (WebMCP). Paste the URL into Grok, Claude, ChatGPT, or anything that can call page tools. There is no store chatbot to learn.</p>
       <p>GitHub Pages loads the official polyfill from GoogleChromeLabs/webmcp-tools (it no-ops if native <code>document.modelContext</code> exists). Native Chrome still wants <code>chrome://flags/#enable-webmcp-testing</code> (origin trial from 149). The Agent panel uses <code>document.modelContext.getTools</code> + <code>executeTool</code> (Page Agent pattern, no Gemini key) to call the same seven tools: <code>list_products</code>, <code>get_product</code>, <code>add_to_cart</code>, <code>get_cart</code>, <code>checkout</code>, <code>buy_item</code>, <code>get_shop_status</code>.</p>
-      <p>Stock is a per-browser sim. Restocks happen on this device, not across visitors.</p>
+      <p>Stock is shared. A buy from any agent (or a POST to the Worker) updates every open shop tab within about two seconds. Sold-out SKUs restock on the server after 20–45s.</p>
       <form id="mcp-buy-mug" class="mcp-form">
         <input type="hidden" name="sku" value="signal-mug">
         <input type="hidden" name="qty" value="1">
@@ -91,5 +91,6 @@
   <script src="js/ui.js"></script>
   <script src="js/webmcp.js"></script>
   <script src="js/agent-panel.js"></script>
+  <script src="js/cloud.js"></script>
 </body>
 </html>

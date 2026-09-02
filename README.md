@@ -6,7 +6,7 @@ A small shop. The shelf restocks itself.
 
 Paste this page into your own agent. The page registers tools on `document.modelContext`. GitHub Pages loads the official [WebMCP polyfill](https://github.com/GoogleChromeLabs/webmcp-tools/blob/main/demos/shared/webmcp-polyfill.js) (Apache-2.0, Google LLC) so tools work without the Chrome flag. The polyfill no-ops when native WebMCP is present. The on-page Agent panel uses `document.modelContext.getTools` + `executeTool` (same pattern as [Page Agent](https://googlechromelabs.github.io/webmcp-tools/demos/page-agent/)); no Gemini API key.
 
-Open two tabs of this shop. A buy in one tab updates the other immediately (BroadcastChannel + localStorage). This is still a sim: other visitors on other devices do not share stock until a hosted shelf API is connected.
+Stock is shared across visitors. The page polls `https://foresight-shop.marvelus.workers.dev/state` and writes buys to `POST /buy`. Same-browser tabs still sync instantly via BroadcastChannel.
 
 ## 60-second demo
 
@@ -27,7 +27,16 @@ Origin trial also exists from Chrome 149.
 ## Copy-paste agent prompt
 
 ```
-You are shopping on my behalf at https://marvelus-tech.github.io/foresight-shop/. The page exposes WebMCP tools (list_products, get_product, add_to_cart, checkout, buy_item, get_shop_status). If you can use WebMCP / page tools, buy one "Signal Mug" and confirm stock changed. If you cannot call WebMCP, tell me what you would call.
+Buy one Signal Mug from the shared Foresight shop. You do not need to be bound to the browser tab.
+
+Shop (keep this open on screen): https://marvelus-tech.github.io/foresight-shop/
+Shared inventory API: https://foresight-shop.marvelus.workers.dev
+
+1. GET https://foresight-shop.marvelus.workers.dev/state and note Signal Mug stock.
+2. POST https://foresight-shop.marvelus.workers.dev/buy with header Content-Type: application/json and body {"sku":"signal-mug","qty":1}
+3. Confirm remaining dropped. The open shop tab should update within about 2 seconds.
+
+If you can call WebMCP / page tools instead, use buy_item with sku signal-mug and qty 1.
 ```
 
 The Agent panel **Copy prompt for my agent** button copies this with the live URL filled in.
@@ -47,6 +56,18 @@ The Agent panel **Copy prompt for my agent** button copies this with the live UR
 Humans can also click **Buy** on a card. Same path.
 
 On-page panel also accepts: `list`, `cart`, `checkout`, `buy 2x signal-mug`, `buy both signal mugs`.
+
+## Shared shelf API
+
+`https://foresight-shop.marvelus.workers.dev`
+
+| Method | Path | Body |
+|---|---|---|
+| `GET` | `/state` | catalog + stock |
+| `POST` | `/buy` | `{ "sku": "signal-mug", "qty": 1 }` |
+| `POST` | `/reset` | restore seed stock (Signal Mug at 2) |
+
+CORS is open. Any agent that can make HTTP calls can buy.
 
 ## Reset
 

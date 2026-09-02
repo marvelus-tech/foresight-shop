@@ -139,6 +139,10 @@ code {
   border-color: var(--rust);
 }
 
+.chip[data-cloud="live"] {
+  border-color: var(--rust);
+}
+
 .cart-btn,
 .text-btn,
 .copy-btn,
