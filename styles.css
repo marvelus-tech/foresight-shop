@@ -802,9 +802,17 @@ form:tool-form-active {
   z-index: 50;
   background: var(--paper-2);
   border: 1px solid var(--line);
-  display: flex;
   flex-direction: column;
   padding: 1rem 1.05rem 1.15rem;
+}
+
+.agent-panel:not([hidden]) {
+  display: flex;
+}
+
+.agent-panel[hidden],
+.backdrop[hidden] {
+  display: none !important;
 }
 
 .agent-head {
