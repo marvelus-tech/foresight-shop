@@ -26,6 +26,9 @@
         view.bumpCart();
       }
     }
+    if (global.ForesightPrompt && typeof global.ForesightPrompt.withHint === "function") {
+      result = global.ForesightPrompt.withHint(name, result);
+    }
     document.dispatchEvent(new CustomEvent("shop:tool", {
       detail: { name: name, args: args || {}, result: result }
     }));

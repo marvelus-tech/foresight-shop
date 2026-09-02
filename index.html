@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,650&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="alternate" type="text/plain" href="llms.txt" title="Instructions for agents">
 </head>
 <body>
   <a class="skip" href="#shelf">Skip to the shelf</a>
@@ -27,12 +28,22 @@
     </div>
   </header>
 
-  <ol class="howto" aria-label="How to try this">
-    <li><span class="n">1</span> Keep this tab open</li>
-    <li><span class="n">2</span> Copy the Agent prompt, or POST to the shared shelf API</li>
-    <li><span class="n">3</span> Buy one Signal Mug from any agent</li>
-    <li><span class="n">4</span> Watch stock drop here, even if the agent is in another window</li>
-  </ol>
+  <section class="pass" aria-label="Hand this to your agent">
+    <div class="pass-copy">
+      <p class="pass-kicker">For your agent</p>
+      <p class="pass-lede">This shelf is live. Keep this tab open. Copy the prompt, or scan the code on your phone, and watch stock move.</p>
+      <div class="pass-actions">
+        <button type="button" id="pass-copy" class="buy">Copy prompt</button>
+        <a class="copy-btn pass-link" href="pass.html">Open pass page</a>
+      </div>
+    </div>
+    <figure class="pass-qr">
+      <a href="pass.html">
+        <img src="pass/qr.svg" width="124" height="124" alt="QR code. Opens a page to copy the agent prompt.">
+      </a>
+      <figcaption>Scan on your phone</figcaption>
+    </figure>
+  </section>
 
   <main>
     <h1 class="tagline">The shelf restocks itself.</h1>
@@ -54,7 +65,7 @@
     <div class="fold-body">
       <p>Bring your own agent. This page registers shop tools on <code>document.modelContext</code> (WebMCP). Paste the URL into Grok, Claude, ChatGPT, or anything that can call page tools. There is no store chatbot to learn.</p>
       <p>GitHub Pages loads the official polyfill from GoogleChromeLabs/webmcp-tools (it no-ops if native <code>document.modelContext</code> exists). Native Chrome still wants <code>chrome://flags/#enable-webmcp-testing</code> (origin trial from 149). The Agent panel uses <code>document.modelContext.getTools</code> + <code>executeTool</code> (Page Agent pattern, no Gemini key) to call the same seven tools: <code>list_products</code>, <code>get_product</code>, <code>add_to_cart</code>, <code>get_cart</code>, <code>checkout</code>, <code>buy_item</code>, <code>get_shop_status</code>.</p>
-      <p>Stock is shared. A buy from any agent (or a POST to the Worker) updates every open shop tab within about two seconds. Sold-out SKUs restock on the server after 20–45s.</p>
+      <p>Stock is shared. A buy from any agent (or a POST to the Worker) updates every open shop tab within about two seconds. Sold-out SKUs restock on the server after 20–45s. Agent responses include <code>tell_your_human</code> so the agent taps its owner.</p>
       <form id="mcp-buy-mug" class="mcp-form">
         <input type="hidden" name="sku" value="signal-mug">
         <input type="hidden" name="qty" value="1">
@@ -70,7 +81,7 @@
       <h2 id="agent-title">Agent</h2>
       <button type="button" id="agent-close" class="text-btn" aria-label="Close agent panel">Close</button>
     </header>
-    <p class="agent-lede">Paste this URL into your agent, or type a buy here.</p>
+    <p class="agent-lede">Copy the prompt, or type a buy here. Same tools either way.</p>
     <button type="button" id="agent-copy" class="copy-btn">Copy prompt for my agent</button>
     <form id="agent-form" class="agent-form">
       <label class="sr" for="agent-input">Command</label>
@@ -86,6 +97,7 @@
   <div id="toasts" class="toasts" aria-live="polite" aria-relevant="additions"></div>
 
   <script src="shared/webmcp-polyfill.js"></script>
+  <script src="js/prompt.js"></script>
   <script src="js/game.js"></script>
   <script src="js/tools.js"></script>
   <script src="js/ui.js"></script>

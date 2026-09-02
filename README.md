@@ -4,7 +4,7 @@ Live: `https://marvelus-tech.github.io/foresight-shop/`
 
 A small shop. The shelf restocks itself.
 
-Paste this page into your own agent. The page registers tools on `document.modelContext`. GitHub Pages loads the official [WebMCP polyfill](https://github.com/GoogleChromeLabs/webmcp-tools/blob/main/demos/shared/webmcp-polyfill.js) (Apache-2.0, Google LLC) so tools work without the Chrome flag. The polyfill no-ops when native WebMCP is present. The on-page Agent panel uses `document.modelContext.getTools` + `executeTool` (same pattern as [Page Agent](https://googlechromelabs.github.io/webmcp-tools/demos/page-agent/)); no Gemini API key.
+Hand this page to your own agent. The shop has a Copy prompt button and a QR that opens `pass.html`. The page registers tools on `document.modelContext`. GitHub Pages loads the official [WebMCP polyfill](https://github.com/GoogleChromeLabs/webmcp-tools/blob/main/demos/shared/webmcp-polyfill.js) (Apache-2.0, Google LLC) so tools work without the Chrome flag. The polyfill no-ops when native WebMCP is present. The on-page Agent panel uses `document.modelContext.getTools` + `executeTool` (same pattern as [Page Agent](https://googlechromelabs.github.io/webmcp-tools/demos/page-agent/)); no Gemini API key.
 
 Stock is shared across visitors. The page polls `https://foresight-shop.marvelus.workers.dev/state` and writes buys to `POST /buy`. Same-browser tabs still sync instantly via BroadcastChannel.
 
@@ -26,20 +26,25 @@ Origin trial also exists from Chrome 149.
 
 ## Copy-paste agent prompt
 
+The **Copy prompt** button on the shop (and the pass page) copies a prompt that tells the agent to buy, then speak to its human.
+
+Agents that fetch the site without a pasted prompt should read `llms.txt` or `GET https://foresight-shop.marvelus.workers.dev/instructions`. Every JSON response includes `tell_your_human`. The agent should say that sentence to its owner.
+
 ```
-Buy one Signal Mug from the shared Foresight shop. You do not need to be bound to the browser tab.
+You are shopping for a human who has the Foresight shop open on another screen.
 
-Shop (keep this open on screen): https://marvelus-tech.github.io/foresight-shop/
+Shop (they are watching this): https://marvelus-tech.github.io/foresight-shop/
 Shared inventory API: https://foresight-shop.marvelus.workers.dev
+Instructions for agents: https://foresight-shop.marvelus.workers.dev/instructions
 
+Do this now:
 1. GET https://foresight-shop.marvelus.workers.dev/state and note Signal Mug stock.
 2. POST https://foresight-shop.marvelus.workers.dev/buy with header Content-Type: application/json and body {"sku":"signal-mug","qty":1}
-3. Confirm remaining dropped. The open shop tab should update within about 2 seconds.
+3. Tell your human, in one short sentence, to look at the open Foresight tab. Quote remaining stock. The shelf should move within about 2 seconds.
 
-If you can call WebMCP / page tools instead, use buy_item with sku signal-mug and qty 1.
+If you can call WebMCP / page tools instead, use buy_item with sku signal-mug and qty 1, then still tell your human to watch the shelf.
+Do not wait for more instructions from the human.
 ```
-
-The Agent panel **Copy prompt for my agent** button copies this with the live URL filled in.
 
 ## Tools
 
@@ -63,7 +68,8 @@ On-page panel also accepts: `list`, `cart`, `checkout`, `buy 2x signal-mug`, `bu
 
 | Method | Path | Body |
 |---|---|---|
-| `GET` | `/state` | catalog + stock |
+| `GET` | `/state` | catalog + stock + `tell_your_human` |
+| `GET` | `/instructions` | prompt for agents |
 | `POST` | `/buy` | `{ "sku": "signal-mug", "qty": 1 }` |
 | `POST` | `/reset` | restore seed stock (Signal Mug at 2) |
 

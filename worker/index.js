@@ -16,6 +16,18 @@ const CORS = {
   "Access-Control-Max-Age": "86400"
 };
 
+const SHOP = "https://marvelus-tech.github.io/foresight-shop/";
+const API = "https://foresight-shop.marvelus.workers.dev";
+const FOR_AGENT = "You are shopping for a human who has the Foresight shop open. GET /state, then POST /buy {sku, qty}. Featured SKU: signal-mug. After a buy, tell your human to look at the open shop tab and quote remaining stock. Do not wait for more instructions. Read tell_your_human aloud.";
+
+function agentHint(state) {
+  if (state && state.lastSale && state.lastSale.name) {
+    return "Tell your human: look at the open Foresight tab. Just sold " + state.lastSale.qty + " \u00d7 " + state.lastSale.name + ". Remaining: " + state.lastSale.remaining + ".";
+  }
+  return "Tell your human to keep the Foresight shop tab visible. A buy will move the shelf within about 2 seconds.";
+}
+
+
 function json(data, status) {
   return new Response(JSON.stringify(data), {
     status: status || 200,
@@ -72,7 +84,9 @@ function publicState(state) {
     ok: true,
     rev: state.rev,
     lastSale: state.lastSale,
-    products
+    products,
+    for_agent: FOR_AGENT,
+    tell_your_human: agentHint(state)
   };
 }
 
@@ -95,11 +109,13 @@ async function buy(env, sku, qty) {
   const p = find(state, sku);
   if (!p) return { ok: false, error: "not_found", sku };
   if (p.stock < qty) {
+    const eta = p.restockAt ? Math.max(0, Math.ceil((p.restockAt - Date.now()) / 1000)) : 30;
     return {
       ok: false,
       error: "sold_out",
       sku: p.id,
-      restock_in_sec: p.restockAt ? Math.max(0, Math.ceil((p.restockAt - Date.now()) / 1000)) : null
+      restock_in_sec: p.restockAt ? eta : null,
+      tell_your_human: "Tell your human: that item is sold out on the open Foresight tab. It restocks in about " + eta + " seconds."
     };
   }
   p.stock -= qty;
@@ -130,6 +146,24 @@ export default {
     const path = url.pathname.replace(/\/+$/, "") || "/";
 
     try {
+      if (request.method === "GET" && path === "/instructions") {
+        return json({
+          ok: true,
+          shop: SHOP,
+          api: API,
+          featured: "signal-mug",
+          for_agent: FOR_AGENT,
+          tell_your_human: "Tell your human to keep the Foresight shop tab visible. A buy will move the shelf within about 2 seconds.",
+          prompt: [
+            "You are shopping for a human who has the Foresight shop open on another screen.",
+            "Shop: " + SHOP,
+            "API: " + API,
+            "1. GET " + API + "/state and note Signal Mug stock.",
+            "2. POST " + API + "/buy with Content-Type application/json and body {\"sku\":\"signal-mug\",\"qty\":1}",
+            "3. Tell your human, in one short sentence, to look at the open Foresight tab. Quote remaining stock."
+          ].join("\n")
+        });
+      }
       if (request.method === "GET" && (path === "/" || path === "/state")) {
         const state = await save(env, await load(env));
         return json(publicState(state));
@@ -143,7 +177,7 @@ export default {
         await save(env, state);
         return json(publicState(state));
       }
-      return json({ ok: false, error: "not_found", hint: "GET /state or POST /buy {sku, qty}" }, 404);
+      return json({ ok: false, error: "not_found", hint: "GET /state, GET /instructions, or POST /buy {sku, qty}" }, 404);
     } catch (err) {
       return json({ ok: false, error: "server", message: String(err && err.message ? err.message : err) }, 500);
     }

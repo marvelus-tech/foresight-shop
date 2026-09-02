@@ -148,17 +148,10 @@
   }
 
   function agentPrompt() {
-    var shopUrl = document.location.href.split("#")[0];
-    var api = (global.ForesightCloud && typeof global.ForesightCloud.url === "function" && global.ForesightCloud.url()) || "https://foresight-shop.marvelus.workers.dev";
-    return (
-      "Buy one Signal Mug from the shared Foresight shop. You do not need to be bound to the browser tab.\n\n" +
-      "Shop (keep this open on screen): " + shopUrl + "\n" +
-      "Shared inventory API: " + api + "\n\n" +
-      "1. GET " + api + "/state and note Signal Mug stock.\n" +
-      "2. POST " + api + "/buy with header Content-Type: application/json and body {\"sku\":\"signal-mug\",\"qty\":1}\n" +
-      "3. Confirm remaining dropped. The open shop tab should update within about 2 seconds.\n\n" +
-      "If you can call WebMCP / page tools instead, use buy_item with sku signal-mug and qty 1."
-    );
+    if (global.ForesightPrompt && typeof global.ForesightPrompt.agentText === "function") {
+      return global.ForesightPrompt.agentText();
+    }
+    return "Buy one Signal Mug from https://marvelus-tech.github.io/foresight-shop/ then tell your human to watch the shelf.";
   }
 
   function copyPrompt() {
@@ -221,6 +214,22 @@
     if (closeBtn) closeBtn.addEventListener("click", function () { setOpen(false); });
     if (back) back.addEventListener("click", function () { setOpen(false); });
     if (copyBtn) copyBtn.addEventListener("click", copyPrompt);
+    var passCopy = $("pass-copy");
+    if (passCopy) {
+      passCopy.addEventListener("click", function () {
+        var text = agentPrompt();
+        var prev = passCopy.textContent;
+        function ok() {
+          passCopy.textContent = "Copied";
+          setTimeout(function () { passCopy.textContent = prev; }, 1600);
+        }
+        if (global.ForesightPrompt && typeof global.ForesightPrompt.copyText === "function") {
+          global.ForesightPrompt.copyText(text, ok);
+        } else {
+          copyPrompt();
+        }
+      });
+    }
     if (form) {
       form.addEventListener("submit", function (e) {
         e.preventDefault();

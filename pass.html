@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hand this to your agent — Foresight</title>
+  <meta name="description" content="Copy a prompt for your agent, then watch the Foresight shelf move.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="pass-page">
+  <header class="mast">
+    <p class="wordmark"><a href="./">Foresight</a></p>
+    <p class="mast-note">For your agent</p>
+  </header>
+
+  <main class="pass-main">
+    <p class="pass-kicker">Keep the shop tab open on the other screen</p>
+    <h1 class="tagline">Hand this to your agent.</h1>
+    <p class="pass-lede">Tap copy, then paste into Grok, Claude, or ChatGPT. Or open one of those with the prompt already filled. Your agent will buy a Signal Mug and tell you to watch the shelf.</p>
+
+    <div class="pass-actions">
+      <button type="button" id="pass-copy" class="buy">Copy prompt</button>
+    </div>
+
+    <p class="pass-open-label">Or open with the prompt filled</p>
+    <p class="pass-apps">
+      <a id="pass-grok" href="https://grok.com/">Grok</a>
+      <a id="pass-claude" href="https://claude.ai/new">Claude</a>
+      <a id="pass-chatgpt" href="https://chatgpt.com/">ChatGPT</a>
+    </p>
+
+    <pre id="pass-prompt" class="pass-prompt"></pre>
+    <p class="pass-back"><a href="./">Back to the shop</a></p>
+  </main>
+
+  <script src="js/prompt.js"></script>
+  <script src="js/pass.js"></script>
+</body>
+</html>
