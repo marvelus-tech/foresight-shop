@@ -68,18 +68,32 @@
     setTimeout(function () { badge.classList.remove("is-tick"); }, 180);
   }
 
-  function highlightCard(sku) {
+  var hitTimers = {};
+
+  function highlightCard(sku, opts) {
     if (!sku) return;
-    var card = document.querySelector('.card[data-sku="' + sku + '"]');
+    opts = opts || {};
+    var card = document.querySelector('.card[data-sku="' + sku.replace(/"/g, "") + '"]');
     if (!card) return;
-    card.classList.remove("is-hot");
+    var hit = opts.hit !== false;
+    card.classList.remove("is-hot", "is-hit");
+    var count = card.querySelector(".stock .count");
+    if (count) count.classList.remove("is-pop");
     void card.offsetWidth;
-    card.classList.add("is-hot");
-    if (!reduceMotion) {
+    if (hit) {
+      card.classList.add("is-hit");
+      card.classList.add("is-hot");
+    }
+    if (count) count.classList.add("is-pop");
+    if (!reduceMotion && opts.scroll !== false) {
       try { card.scrollIntoView({ block: "nearest", behavior: "smooth" }); }
       catch (err) { card.scrollIntoView(); }
     }
-    setTimeout(function () { card.classList.remove("is-hot"); }, 180);
+    clearTimeout(hitTimers[sku]);
+    hitTimers[sku] = setTimeout(function () {
+      card.classList.remove("is-hot", "is-hit");
+      if (count) count.classList.remove("is-pop");
+    }, 1450);
   }
 
   function renderBadge() {
@@ -128,6 +142,7 @@
       : '<p class="stock"><span class="count">' + product.stock + "</span> left</p>";
     return (
       '<article class="' + cls + '" data-sku="' + escapeHtml(product.sku) + '">' +
+        '<span class="hit-ring" aria-hidden="true"></span>' +
         ribbon +
         '<div class="mark mark-' + escapeHtml(product.sku) + '" aria-hidden="true"></div>' +
         '<h2 class="name">' + escapeHtml(product.name) + "</h2>" +
@@ -227,7 +242,6 @@
     if (!card) return;
     var sku = card.getAttribute("data-sku");
     var act = btn.getAttribute("data-act");
-    highlightCard(sku);
     var result;
     if (act === "buy") {
       result = global.ForesightTools.buy_item({ sku: sku, qty: 1 });
@@ -266,14 +280,30 @@
       renderBag();
       setLiveSale(d.name || (d.items && d.items[0] && d.items[0].name), d.qty || (d.items && d.items[0] && d.items[0].qty) || 1);
     }
+    var flashes = [];
+    if ((d.reason === "buy" || d.reason === "checkout") && d.items && d.items.length) {
+      d.items.forEach(function (it) { if (it.sku) flashes.push({ sku: it.sku, hit: true }); });
+    } else if (d.reason === "buy" && d.sku) {
+      flashes.push({ sku: d.sku, hit: true });
+    }
+    if (d.reason === "restock" && d.sku) flashes.push({ sku: d.sku, hit: false });
     if (d.reason === "remote" && d.changed && d.changed.length) {
       d.changed.forEach(function (c) {
-        highlightCard(c.sku);
+        flashes.push({ sku: c.sku, hit: c.to < c.from });
         if (c.to < c.from) toast(c.name + " sold on another tab", "ok");
         else if (c.to > c.from) toast("Shipment in" + (c.name ? ": " + c.name : ""), "ship");
       });
       var drop = d.changed.filter(function (c) { return c.to < c.from; })[0];
       if (drop) setLiveSale(drop.name, drop.from - drop.to);
+    }
+    if (flashes.length) {
+      requestAnimationFrame(function () {
+        flashes.forEach(function (f, i) {
+          setTimeout(function () {
+            highlightCard(f.sku, { hit: f.hit, scroll: i === 0 });
+          }, i * 80);
+        });
+      });
     }
   }
 

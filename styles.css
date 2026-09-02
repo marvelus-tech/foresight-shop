@@ -361,11 +361,66 @@ a.pass-link {
   transition: transform 180ms var(--ease), opacity 180ms var(--ease);
 }
 
-.card.is-hot {
-  transform: scale(1.02);
-  z-index: 2;
-  outline: 1px solid var(--rust);
-  outline-offset: -1px;
+.card.is-hot,
+.card.is-hit {
+  z-index: 3;
+}
+
+@property --hit-a {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.hit-ring {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  padding: 2px;
+  background: conic-gradient(
+    from var(--hit-a),
+    #c45c26 0deg,
+    #f3ece3 48deg,
+    #e08a3c 110deg,
+    #c45c26 180deg,
+    #6b3418 260deg,
+    #c45c26 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.card.is-hit {
+  box-shadow:
+    0 0 0 1px rgba(196, 92, 38, 0.95),
+    0 0 18px rgba(196, 92, 38, 0.5),
+    0 0 42px rgba(196, 92, 38, 0.22);
+  animation: hit-lift 1.35s var(--ease);
+}
+
+.card.is-hit .hit-ring {
+  animation: hit-spin 0.8s linear 2, hit-fade 1.45s var(--ease) forwards;
+}
+
+@keyframes hit-spin {
+  to { --hit-a: 360deg; }
+}
+
+@keyframes hit-fade {
+  0% { opacity: 0; }
+  8% { opacity: 1; }
+  72% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes hit-lift {
+  0%, 100% { transform: scale(1); }
+  16% { transform: scale(1.018); }
 }
 
 .card.is-sold {
@@ -436,10 +491,22 @@ a.pass-link {
 }
 
 .stock .count {
+  display: inline-block;
   color: var(--ink);
   font-variant-numeric: tabular-nums;
   font-weight: 500;
   font-size: 1.05rem;
+  transform-origin: center bottom;
+}
+
+.stock .count.is-pop {
+  animation: stock-pop 720ms cubic-bezier(0.16, 1.12, 0.32, 1);
+}
+
+@keyframes stock-pop {
+  0% { transform: scale(1); color: var(--ink); }
+  22% { transform: scale(1.9); color: #f3ece3; }
+  100% { transform: scale(1); color: var(--ink); }
 }
 
 .acts {
@@ -1040,6 +1107,17 @@ body.agent-open {
   *::after {
     animation: none !important;
     transition: none !important;
+  }
+  .card.is-hit {
+    outline: 2px solid var(--rust);
+    outline-offset: -2px;
+    box-shadow: none;
+    transform: none;
+  }
+  .card.is-hit .hit-ring {
+    opacity: 1;
+    background: var(--rust);
+    padding: 2px;
   }
 }
 
