@@ -1,0 +1,74 @@
+[
+  {
+    "id": "signal-mug",
+    "name": "Signal Mug",
+    "price": 48,
+    "stock": 2,
+    "maxStock": 6,
+    "restockSec": 30,
+    "flavor": "Stoneware with a rust ring at the lip. Holds heat like it means it."
+  },
+  {
+    "id": "threshold-lamp",
+    "name": "Threshold Lamp",
+    "price": 186,
+    "stock": 3,
+    "maxStock": 4,
+    "restockSec": 40,
+    "flavor": "Brass stem, linen shade. Lights the doorway, not the room."
+  },
+  {
+    "id": "field-ledger",
+    "name": "Field Ledger",
+    "price": 32,
+    "stock": 5,
+    "maxStock": 8,
+    "restockSec": 22,
+    "flavor": "Cloth-bound, unlined. For lists that outlast the week."
+  },
+  {
+    "id": "day-tote",
+    "name": "Day Tote",
+    "price": 64,
+    "stock": 4,
+    "maxStock": 6,
+    "restockSec": 28,
+    "flavor": "Waxed canvas, one pocket, no mark. The bag that disappears."
+  },
+  {
+    "id": "wick-hour",
+    "name": "Wick Hour",
+    "price": 42,
+    "stock": 4,
+    "maxStock": 8,
+    "restockSec": 24,
+    "flavor": "Beeswax and cedar. A measured hour of quiet."
+  },
+  {
+    "id": "table-deck",
+    "name": "Table Deck",
+    "price": 28,
+    "stock": 6,
+    "maxStock": 10,
+    "restockSec": 20,
+    "flavor": "Fifty-two letterpress faces, no jokers. For the long game."
+  },
+  {
+    "id": "window-fern",
+    "name": "Window Fern",
+    "price": 54,
+    "stock": 3,
+    "maxStock": 5,
+    "restockSec": 36,
+    "flavor": "Boston fern in unglazed clay. Needs a sill and patience."
+  },
+  {
+    "id": "shelf-weight",
+    "name": "Shelf Weight",
+    "price": 38,
+    "stock": 5,
+    "maxStock": 7,
+    "restockSec": 26,
+    "flavor": "Cast iron, fist-sized. Keeps paper, and the shelf, honest."
+  }
+]
