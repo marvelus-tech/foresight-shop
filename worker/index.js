@@ -27,7 +27,6 @@ function agentHint(state) {
   return "Tell your human to keep the Foresight shop tab visible. A buy will move the shelf within about 2 seconds.";
 }
 
-
 function json(data, status) {
   return new Response(JSON.stringify(data), {
     status: status || 200,
@@ -55,18 +54,7 @@ function applyRestocks(state) {
     }
   }
   if (changed) state.rev += 1;
-  return state;
-}
-
-async function load(env) {
-  const raw = await env.STOCK.get("state", { type: "json" });
-  const state = raw && raw.products ? raw : seedState();
-  return applyRestocks(state);
-}
-
-async function save(env, state) {
-  await env.STOCK.put("state", JSON.stringify(state));
-  return state;
+  return { state, changed };
 }
 
 function publicState(state) {
@@ -102,39 +90,98 @@ function find(state, sku) {
   return null;
 }
 
-async function buy(env, sku, qty) {
-  qty = Math.floor(Number(qty));
-  if (!Number.isFinite(qty) || qty < 1) return { ok: false, error: "invalid_qty", sku };
-  const state = await load(env);
-  const p = find(state, sku);
-  if (!p) return { ok: false, error: "not_found", sku };
-  if (p.stock < qty) {
-    const eta = p.restockAt ? Math.max(0, Math.ceil((p.restockAt - Date.now()) / 1000)) : 30;
+function instructions() {
+  return json({
+    ok: true,
+    shop: SHOP,
+    api: API,
+    featured: "signal-mug",
+    for_agent: FOR_AGENT,
+    tell_your_human: "Tell your human to keep the Foresight shop tab visible. A buy will move the shelf within about 2 seconds.",
+    prompt: [
+      "You are shopping for a human who has the Foresight shop open on another screen.",
+      "Shop: " + SHOP,
+      "API: " + API,
+      "1. GET " + API + "/state and note Signal Mug stock.",
+      "2. POST " + API + "/buy with Content-Type application/json and body {\"sku\":\"signal-mug\",\"qty\":1}",
+      "3. Tell your human, in one short sentence, to look at the open Foresight tab. Quote remaining stock."
+    ].join("\n")
+  });
+}
+
+export class Shelf {
+  constructor(ctx, env) {
+    this.ctx = ctx;
+    this.env = env;
+  }
+
+  async load() {
+    let raw = await this.ctx.storage.get("state");
+    if (!raw && this.env.STOCK) {
+      try {
+        raw = await this.env.STOCK.get("state", { type: "json" });
+      } catch (err) {
+        raw = null;
+      }
+    }
+    const base = raw && raw.products ? raw : seedState();
+    const { state, changed } = applyRestocks(base);
+    if (changed) await this.ctx.storage.put("state", state);
+    return state;
+  }
+
+  async buy(sku, qty) {
+    qty = Math.floor(Number(qty));
+    if (!Number.isFinite(qty) || qty < 1) return { ok: false, error: "invalid_qty", sku };
+    const state = await this.load();
+    const p = find(state, sku);
+    if (!p) return { ok: false, error: "not_found", sku };
+    if (p.stock < qty) {
+      const eta = p.restockAt ? Math.max(0, Math.ceil((p.restockAt - Date.now()) / 1000)) : 30;
+      return {
+        ok: false,
+        error: "sold_out",
+        sku: p.id,
+        restock_in_sec: p.restockAt ? eta : null,
+        tell_your_human: "Tell your human: that item is sold out on the open Foresight tab. It restocks in about " + eta + " seconds."
+      };
+    }
+    p.stock -= qty;
+    if (p.stock === 0) p.restockAt = Date.now() + p.restockSec * 1000;
+    state.rev += 1;
+    const order_id = "FS-" + String(state.orderSeq++).padStart(4, "0");
+    state.lastSale = { sku: p.id, name: p.name, qty, remaining: p.stock, order_id, at: Date.now() };
+    await this.ctx.storage.put("state", state);
     return {
-      ok: false,
-      error: "sold_out",
+      ok: true,
+      order_id,
       sku: p.id,
-      restock_in_sec: p.restockAt ? eta : null,
-      tell_your_human: "Tell your human: that item is sold out on the open Foresight tab. It restocks in about " + eta + " seconds."
+      name: p.name,
+      qty,
+      remaining: p.stock,
+      total: p.price * qty,
+      currency: "AUD",
+      ...publicState(state)
     };
   }
-  p.stock -= qty;
-  if (p.stock === 0) p.restockAt = Date.now() + p.restockSec * 1000;
-  state.rev += 1;
-  const order_id = "FS-" + String(state.orderSeq++).padStart(4, "0");
-  state.lastSale = { sku: p.id, name: p.name, qty, remaining: p.stock, order_id, at: Date.now() };
-  await save(env, state);
-  return {
-    ok: true,
-    order_id,
-    sku: p.id,
-    name: p.name,
-    qty,
-    remaining: p.stock,
-    total: p.price * qty,
-    currency: "AUD",
-    ...publicState(state)
-  };
+
+  async fetch(request) {
+    const url = new URL(request.url);
+    const path = url.pathname.replace(/\/+$/, "") || "/";
+    if (request.method === "GET" && (path === "/" || path === "/state")) {
+      return json(publicState(await this.load()));
+    }
+    if (request.method === "POST" && path === "/buy") {
+      const body = await request.json().catch(() => ({}));
+      return json(await this.buy(body.sku || body.id, body.qty == null ? 1 : body.qty));
+    }
+    if (request.method === "POST" && path === "/reset") {
+      const state = seedState();
+      await this.ctx.storage.put("state", state);
+      return json(publicState(state));
+    }
+    return json({ ok: false, error: "not_found", hint: "GET /state, GET /instructions, or POST /buy {sku, qty}" }, 404);
+  }
 }
 
 export default {
@@ -144,42 +191,10 @@ export default {
     }
     const url = new URL(request.url);
     const path = url.pathname.replace(/\/+$/, "") || "/";
-
-    try {
-      if (request.method === "GET" && path === "/instructions") {
-        return json({
-          ok: true,
-          shop: SHOP,
-          api: API,
-          featured: "signal-mug",
-          for_agent: FOR_AGENT,
-          tell_your_human: "Tell your human to keep the Foresight shop tab visible. A buy will move the shelf within about 2 seconds.",
-          prompt: [
-            "You are shopping for a human who has the Foresight shop open on another screen.",
-            "Shop: " + SHOP,
-            "API: " + API,
-            "1. GET " + API + "/state and note Signal Mug stock.",
-            "2. POST " + API + "/buy with Content-Type application/json and body {\"sku\":\"signal-mug\",\"qty\":1}",
-            "3. Tell your human, in one short sentence, to look at the open Foresight tab. Quote remaining stock."
-          ].join("\n")
-        });
-      }
-      if (request.method === "GET" && (path === "/" || path === "/state")) {
-        const state = await save(env, await load(env));
-        return json(publicState(state));
-      }
-      if (request.method === "POST" && path === "/buy") {
-        const body = await request.json().catch(() => ({}));
-        return json(await buy(env, body.sku || body.id, body.qty == null ? 1 : body.qty));
-      }
-      if (request.method === "POST" && path === "/reset") {
-        const state = seedState();
-        await save(env, state);
-        return json(publicState(state));
-      }
-      return json({ ok: false, error: "not_found", hint: "GET /state, GET /instructions, or POST /buy {sku, qty}" }, 404);
-    } catch (err) {
-      return json({ ok: false, error: "server", message: String(err && err.message ? err.message : err) }, 500);
+    if (request.method === "GET" && path === "/instructions") {
+      return instructions();
     }
+    const stub = env.SHELF.get(env.SHELF.idFromName("foresight"));
+    return stub.fetch(request);
   }
 };

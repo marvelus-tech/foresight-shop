@@ -7,5 +7,13 @@
       "binding": "STOCK",
       "id": "fbafe63dfb6f4f9c930d917615b3e4f9"
     }
+  ],
+  "durable_objects": {
+    "bindings": [
+      { "name": "SHELF", "class_name": "Shelf" }
+    ]
+  },
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["Shelf"] }
   ]
 }
