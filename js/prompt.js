@@ -82,7 +82,15 @@
 
   function withHint(name, result) {
     if (!result || typeof result !== "object") return result;
-    result.tell_your_human = tellHuman(name, result);
+    
+    if (global.ForesightDelight && typeof global.ForesightDelight.pick === "function") {
+      var picked = global.ForesightDelight.pick(name, result);
+      result.tell_your_human = picked.tell_your_human;
+      result.delight = picked.delight;
+    } else {
+      result.tell_your_human = tellHuman(name, result);
+    }
+    
     return result;
   }
 
