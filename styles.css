@@ -564,14 +564,34 @@ a.pass-link {
   background: var(--paper);
 }
 
-/* Product art */
+/* Product art — fill the card cell, photo first */
 .product-art {
-  width: 100%;
-  max-width: 160px;
-  height: 160px;
+  display: block;
+  width: calc(100% + 0.4rem);
+  max-width: none;
+  height: auto;
+  aspect-ratio: 1 / 1;
   object-fit: contain;
-  margin: 0.75rem auto 0;
-  background: var(--paper);
+  margin: -0.15rem -0.2rem 0.45rem;
+  padding: 0.5rem;
+  background: var(--paper-2);
+  border-radius: 10px;
+}
+
+.card:has(.product-art) .mark {
+  display: none;
+}
+
+.card:has(.product-art) {
+  padding-top: 0.85rem;
+}
+
+.shelf .card:first-child .product-art {
+  aspect-ratio: 4 / 3;
+  min-height: 260px;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 /* Marks — CSS geometry, one per SKU */
