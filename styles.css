@@ -1,10 +1,10 @@
-/* Foresight — dark paper shop. Motion: transform + opacity only. */
+/* Foresight — light paper shop. Motion: transform + opacity only. */
 :root {
-  --paper: #14110e;
-  --paper-2: #1b1713;
-  --ink: #f3ece3;
-  --mute: #9a9186;
-  --line: rgba(243, 236, 227, 0.12);
+  --paper: #faf7f2;
+  --paper-2: #f2ede6;
+  --ink: #1a1612;
+  --mute: #6e675f;
+  --line: rgba(26, 22, 18, 0.12);
   --rust: #c45c26;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --r: 5px;
@@ -56,7 +56,7 @@ code {
   font-family: "IBM Plex Sans", sans-serif;
   font-size: 0.9em;
   color: var(--ink);
-  background: rgba(243, 236, 227, 0.06);
+  background: rgba(26, 22, 18, 0.06);
   padding: 0.05em 0.3em;
   border-radius: 4px;
 }
@@ -175,7 +175,7 @@ code {
 
 .cart-btn:hover,
 .cart-btn:focus-visible {
-  border-color: rgba(243, 236, 227, 0.28);
+  border-color: rgba(26, 22, 18, 0.28);
 }
 
 .badge {
@@ -239,7 +239,7 @@ a.pass-link {
 .pass-qr {
   margin: 0;
   padding: 0.45rem 0.45rem 0.35rem;
-  background: #f3ece3;
+  background: #1a1612;
   border-radius: var(--r);
 }
 
@@ -249,7 +249,7 @@ a.pass-link {
 }
 
 .pass-qr figcaption {
-  color: #14110e;
+  color: #faf7f2;
   font-size: 0.68rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -359,6 +359,7 @@ a.pass-link {
   transform: scale(1);
   opacity: 1;
   transition: transform 180ms var(--ease), opacity 180ms var(--ease);
+  box-shadow: 0 1px 3px rgba(26, 22, 18, 0.04);
 }
 
 .card.is-hot,
@@ -382,10 +383,10 @@ a.pass-link {
   background: conic-gradient(
     from var(--hit-a),
     #c45c26 0deg,
-    #f3ece3 48deg,
+    #8b3e1a 48deg,
     #e08a3c 110deg,
     #c45c26 180deg,
-    #6b3418 260deg,
+    #d47841 260deg,
     #c45c26 360deg
   );
   -webkit-mask:
@@ -398,8 +399,8 @@ a.pass-link {
 .card.is-hit {
   box-shadow:
     0 0 0 1px rgba(196, 92, 38, 0.95),
-    0 0 18px rgba(196, 92, 38, 0.5),
-    0 0 42px rgba(196, 92, 38, 0.22);
+    0 0 18px rgba(196, 92, 38, 0.4),
+    0 0 42px rgba(196, 92, 38, 0.18);
   animation: hit-lift 1.35s var(--ease);
 }
 
@@ -477,7 +478,7 @@ a.pass-link {
   width: 6px;
   height: 6px;
   border-radius: 1px;
-  background: rgba(243, 236, 227, 0.14);
+  background: rgba(26, 22, 18, 0.14);
 }
 
 .pip.is-on {
@@ -505,7 +506,7 @@ a.pass-link {
 
 @keyframes stock-pop {
   0% { transform: scale(1); color: var(--ink); }
-  22% { transform: scale(1.9); color: #f3ece3; }
+  22% { transform: scale(1.9); color: #1a1612; }
   100% { transform: scale(1); color: var(--ink); }
 }
 
@@ -790,7 +791,7 @@ a.pass-link {
 .mcp-form .buy:hover,
 .mcp-form .buy:focus-visible {
   color: var(--ink);
-  border-color: rgba(243, 236, 227, 0.28);
+  border-color: rgba(26, 22, 18, 0.28);
   filter: none;
 }
 
@@ -810,6 +811,7 @@ form:tool-form-active {
   border-radius: var(--r);
   padding: 1rem;
   z-index: 30;
+  box-shadow: 0 4px 24px rgba(26, 22, 18, 0.08);
 }
 
 .bag-title {
@@ -859,7 +861,7 @@ form:tool-form-active {
 .backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(10, 8, 6, 0.46);
+  background: rgba(26, 22, 18, 0.35);
   z-index: 40;
   opacity: 1;
 }
@@ -871,6 +873,7 @@ form:tool-form-active {
   border: 1px solid var(--line);
   flex-direction: column;
   padding: 1rem 1.05rem 1.15rem;
+  box-shadow: -2px 0 24px rgba(26, 22, 18, 0.08);
 }
 
 .agent-panel:not([hidden]) {
@@ -911,7 +914,7 @@ form:tool-form-active {
 
 .copy-btn:hover,
 .copy-btn:focus-visible {
-  border-color: rgba(243, 236, 227, 0.28);
+  border-color: rgba(26, 22, 18, 0.28);
 }
 
 .agent-form {
@@ -932,6 +935,7 @@ form:tool-form-active {
 
 .agent-form input:focus {
   border-color: rgba(196, 92, 38, 0.7);
+  box-shadow: 0 0 0 3px rgba(196, 92, 38, 0.08);
 }
 
 .agent-hint {
@@ -1003,6 +1007,7 @@ form:tool-form-active {
   opacity: 0;
   transform: translateY(6px);
   transition: transform 180ms var(--ease), opacity 180ms var(--ease);
+  box-shadow: 0 4px 12px rgba(26, 22, 18, 0.1);
 }
 
 .toast.is-in {
