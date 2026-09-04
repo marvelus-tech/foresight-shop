@@ -352,7 +352,7 @@ a.pass-link {
 .card {
   position: relative;
   background: var(--paper);
-  padding: 1.15rem 1.05rem 1.2rem;
+  padding: 0.9rem 0.95rem 1rem;
   display: flex;
   flex-direction: column;
   min-height: 100%;
@@ -564,18 +564,16 @@ a.pass-link {
   background: var(--paper);
 }
 
-/* Product art — fill the card cell, photo first */
+/* Product art — flush photo, no well, natural height */
 .product-art {
   display: block;
-  width: calc(100% + 0.4rem);
-  max-width: none;
+  width: 100%;
   height: auto;
-  aspect-ratio: 1 / 1;
   object-fit: contain;
-  margin: -0.15rem -0.2rem 0.45rem;
-  padding: 0.5rem;
-  background: var(--paper-2);
-  border-radius: 10px;
+  margin: 0 0 0.55rem;
+  padding: 0;
+  background: transparent;
+  border-radius: 6px;
 }
 
 .card:has(.product-art) .mark {
@@ -583,15 +581,7 @@ a.pass-link {
 }
 
 .card:has(.product-art) {
-  padding-top: 0.85rem;
-}
-
-.shelf .card:first-child .product-art {
-  aspect-ratio: 4 / 3;
-  min-height: 260px;
-  width: 100%;
-  margin-left: 0;
-  margin-right: 0;
+  padding-top: 0.75rem;
 }
 
 /* Marks — CSS geometry, one per SKU */
