@@ -1,0 +1,16 @@
+name = "foresight-shop"
+main = "worker/index.js"
+compatibility_date = "2024-01-01"
+
+[[durable_objects.bindings]]
+name = "SHELF"
+class_name = "Shelf"
+script_name = "foresight-shop"
+
+[[migrations]]
+tag = "v1"
+new_classes = ["Shelf"]
+
+[env.production]
+workers_dev = false
+route = "https://foresight-shop.marvelus.workers.dev/*"
