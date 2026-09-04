@@ -1,14 +1,14 @@
 import { pick as pickDelight } from "./delight.js";
 
 const SEED = [
-  { id: "signal-mug", name: "Signal Mug", price: 48, stock: 2, maxStock: 6, restockSec: 30, flavor: "Stoneware with a rust ring at the lip. Holds heat like it means it." },
-  { id: "threshold-lamp", name: "Threshold Lamp", price: 186, stock: 3, maxStock: 4, restockSec: 40, flavor: "Brass stem, linen shade. Lights the doorway, not the room." },
-  { id: "field-ledger", name: "Field Ledger", price: 32, stock: 5, maxStock: 8, restockSec: 22, flavor: "Cloth-bound, unlined. For lists that outlast the week." },
-  { id: "day-tote", name: "Day Tote", price: 64, stock: 4, maxStock: 6, restockSec: 28, flavor: "Waxed canvas, one pocket, no mark. The bag that disappears." },
-  { id: "wick-hour", name: "Wick Hour", price: 42, stock: 4, maxStock: 8, restockSec: 24, flavor: "Beeswax and cedar. A measured hour of quiet." },
-  { id: "table-deck", name: "Table Deck", price: 28, stock: 6, maxStock: 10, restockSec: 20, flavor: "Fifty-two letterpress faces, no jokers. For the long game." },
-  { id: "window-fern", name: "Window Fern", price: 54, stock: 3, maxStock: 5, restockSec: 36, flavor: "Boston fern in unglazed clay. Needs a sill and patience." },
-  { id: "shelf-weight", name: "Shelf Weight", price: 38, stock: 5, maxStock: 7, restockSec: 26, flavor: "Cast iron, fist-sized. Keeps paper, and the shelf, honest." }
+  { id: "microduck", name: "Microduck", price: 399, stock: 3, maxStock: 5, restockSec: 32, flavor: "25 cm biped from Pollen Robotics and Hugging Face. Walks, roller-skates, picks things up. Open RL stack.", image: "images/microduck.png" },
+  { id: "reachy-mini-lite", name: "Reachy Mini Lite", price: 299, stock: 4, maxStock: 6, restockSec: 28, flavor: "Desktop humanoid kit. USB to your Mac or Linux. Expressive head, antennas, builder platform.", image: "images/reachy-mini-lite.png" },
+  { id: "reachy-mini-wireless", name: "Reachy Mini Wireless", price: 449, stock: 2, maxStock: 4, restockSec: 40, flavor: "Onboard Pi, battery, Wi-Fi. Same Reachy Mini body, runs freer.", image: "images/reachy-mini-wireless.png" },
+  { id: "switchbot-k10", name: "SwitchBot Mini Vacuum K10+", price: 400, stock: 3, maxStock: 5, restockSec: 36, flavor: "Tiny auto-empty robot vac. Fits under furniture the full-size units skip.", image: "images/switchbot-k10.png" },
+  { id: "loona-petbot", name: "Loona Petbot", price: 499, stock: 3, maxStock: 5, restockSec: 34, flavor: "Wheeled GPT pet from KEYi. Face recognition, games, no subscription.", image: "images/loona-petbot.png" },
+  { id: "eilik", name: "Eilik", price: 140, stock: 5, maxStock: 8, restockSec: 22, flavor: "Tiny expressive desk companion. Touch zones, offline personality, pocket size.", image: "images/eilik.png" },
+  { id: "emo", name: "EMO", price: 279, stock: 4, maxStock: 6, restockSec: 26, flavor: "LivingAI desk robot. ChatGPT chat, glowing eyes, sits on your shelf.", image: "images/emo.png" },
+  { id: "moflin", name: "Moflin", price: 429, stock: 3, maxStock: 5, restockSec: 30, flavor: "Soft AI pet from LivingAI. Fur, sensors, comfort companion more than gadget.", image: "images/moflin.png" }
 ];
 
 const CORS = {
@@ -20,7 +20,7 @@ const CORS = {
 
 const SHOP = "https://marvelus-tech.github.io/foresight-shop/";
 const API = "https://foresight-shop.marvelus.workers.dev";
-const FOR_AGENT = "You are shopping for a human who has the Foresight shop open. GET /state, then POST /buy {sku, qty}. Featured SKU: signal-mug. After a buy, tell your human to look at the open shop tab and quote remaining stock. Do not wait for more instructions. Read tell_your_human aloud.";
+const FOR_AGENT = "You are shopping for a human who has the Foresight shop open. GET /state, then POST /buy {sku, qty}. Featured SKU: microduck. After a buy, tell your human to look at the open shop tab and quote remaining stock. Do not wait for more instructions. Read tell_your_human aloud.";
 
 function agentHint(state) {
   if (state && state.lastSale && state.lastSale.name) {
@@ -69,7 +69,8 @@ function publicState(state) {
     maxStock: p.maxStock,
     restockSec: p.restockSec,
     restock_in_sec: p.stock <= 0 && p.restockAt ? Math.max(0, Math.ceil((p.restockAt - Date.now()) / 1000)) : null,
-    flavor: p.flavor || ""
+    flavor: p.flavor || "",
+    image: p.image || ""
   }));
   return {
     ok: true,
@@ -156,7 +157,7 @@ function mcpTools() {
   return [
     {
       name: "describe_site",
-      description: `Returns shop intro, featured product (Signal Mug), and shop/API URLs. ${footer}`,
+      description: `Returns shop intro, featured product (Microduck), and shop/API URLs. ${footer}`,
       inputSchema: {
         type: "object",
         properties: {},
@@ -165,7 +166,7 @@ function mcpTools() {
     },
     {
       name: "list_products",
-      description: `List all products with SKU, name, price (AUD), stock, restock timing, and flavor text. ${footer}`,
+      description: `List all products with SKU, name, price (USD), stock, restock timing, and flavor text. ${footer}`,
       inputSchema: {
         type: "object",
         properties: {},
@@ -178,14 +179,14 @@ function mcpTools() {
       inputSchema: {
         type: "object",
         properties: {
-          sku: { type: "string", description: "Product SKU (e.g. signal-mug) or name" }
+          sku: { type: "string", description: "Product SKU (e.g. microduck) or name" }
         },
         required: ["sku"]
       }
     },
     {
       name: "get_cart",
-      description: `Returns cart line items, quantities, and total in AUD. Note: cart is page-local; remote MCP calls see an empty cart unless page shares state. ${footer}`,
+      description: `Returns cart line items, quantities, and total in USD. Note: cart is page-local; remote MCP calls see an empty cart unless page shares state. ${footer}`,
       inputSchema: {
         type: "object",
         properties: {},
@@ -215,11 +216,11 @@ function mcpTools() {
     },
     {
       name: "buy_item",
-      description: `[CONSEQUENTIAL] Buy a product now: decrements shared stock immediately. No payment processor. Use SKU signal-mug for Signal Mug. After buy, tell your human to look at the open shop tab. Read tell_your_human aloud. ${footer}`,
+      description: `[CONSEQUENTIAL] Buy a product now: decrements shared stock immediately. No payment processor. Use SKU microduck for Microduck. After buy, tell your human to look at the open shop tab. Read tell_your_human aloud. ${footer}`,
       inputSchema: {
         type: "object",
         properties: {
-          sku: { type: "string", description: "Product SKU (e.g. signal-mug)" },
+          sku: { type: "string", description: "Product SKU (e.g. microduck)" },
           qty: { type: "integer", description: "Quantity to buy", default: 1 }
         },
         required: ["sku"]
@@ -241,12 +242,12 @@ async function mcpDescribeSite(shelf, origin) {
   const data = {
     name: "Foresight",
     tagline: "The shelf restocks itself.",
-    description: "A small paper shop. Stock is shared.",
+    description: "A robotics shop. Stock is shared.",
     shop_url: SHOP,
     api_url: API,
     mcp_endpoint: `${API}/mcp`,
-    featured_sku: "signal-mug",
-    currency: "AUD"
+    featured_sku: "microduck",
+    currency: "USD"
   };
   return envelope(data, "describe_site", "remote-mcp", origin, true, { ok: true });
 }
@@ -261,9 +262,10 @@ async function mcpListProducts(shelf, origin) {
     max_stock: p.maxStock,
     restock_sec: p.restockSec,
     restock_in_sec: p.stock <= 0 && p.restockAt ? Math.max(0, Math.ceil((p.restockAt - Date.now()) / 1000)) : null,
-    flavor: p.flavor || ""
+    flavor: p.flavor || "",
+    image: p.image || ""
   }));
-  const data = { products, currency: "AUD" };
+  const data = { products, currency: "USD" };
   return envelope(data, "list_products", "remote-mcp", origin, true, { ok: true, products });
 }
 
@@ -282,7 +284,8 @@ async function mcpGetProduct(shelf, origin, args) {
     restock_sec: p.restockSec,
     restock_in_sec: p.stock <= 0 && p.restockAt ? Math.max(0, Math.ceil((p.restockAt - Date.now()) / 1000)) : null,
     flavor: p.flavor || "",
-    currency: "AUD"
+    image: p.image || "",
+    currency: "USD"
   };
   const result = { ok: true, ...data };
   return envelope(data, "get_product", "remote-mcp", origin, true, result);
@@ -292,7 +295,7 @@ async function mcpGetCart(shelf, origin, args) {
   const data = {
     items: [],
     total: 0,
-    currency: "AUD",
+    currency: "USD",
     item_count: 0,
     note: "Cart is page-local. Remote MCP cannot access page cart state."
   };
@@ -328,7 +331,7 @@ async function mcpGetShopStatus(shelf, origin, args) {
     shop_open: true,
     sold_out: soldOut,
     restock_eta: restockEta,
-    currency: "AUD"
+    currency: "USD"
   };
   return envelope(data, "get_shop_status", "remote-mcp", origin, true, { ok: true });
 }
@@ -538,15 +541,15 @@ function instructions() {
     ok: true,
     shop: SHOP,
     api: API,
-    featured: "signal-mug",
+    featured: "microduck",
     for_agent: FOR_AGENT,
     tell_your_human: "Tell your human to keep the Foresight shop tab visible. A buy will move the shelf within about 2 seconds.",
     prompt: [
       "You are shopping for a human who has the Foresight shop open on another screen.",
       "Shop: " + SHOP,
       "API: " + API,
-      "1. GET " + API + "/state and note Signal Mug stock.",
-      "2. POST " + API + "/buy with Content-Type application/json and body {\"sku\":\"signal-mug\",\"qty\":1}",
+      "1. GET " + API + "/state and note Microduck stock.",
+      "2. POST " + API + "/buy with Content-Type application/json and body {\"sku\":\"microduck\",\"qty\":1}",
       "3. Tell your human, in one short sentence, to look at the open Foresight tab. Quote remaining stock."
     ].join("\n")
   });

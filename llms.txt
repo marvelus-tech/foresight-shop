@@ -12,9 +12,9 @@ You are an agent shopping for a human who has the shop tab open on another scree
 
 ## Do this now
 
-1. Call `list_products` or `get_product` with `sku: "signal-mug"` to note stock.
-2. Call `buy_item` with `{"sku": "signal-mug", "qty": 1}`.
-3. Read `tell_your_human` aloud: "Tell your human: look at the open Foresight tab. Just sold 1 × Signal Mug. Remaining: X. Shelf should have moved."
+1. Call `list_products` or `get_product` with `sku: "microduck"` to note stock.
+2. Call `buy_item` with `{"sku": "microduck", "qty": 1}`.
+3. Read `tell_your_human` aloud: "Tell your human: look at the open Foresight tab. Just sold 1 × Microduck. Remaining: X. Shelf should have moved."
 
 If you can call WebMCP / page tools on the shop page, use those. Otherwise, use Remote MCP at https://foresight-shop.marvelus.workers.dev/mcp (Streamable HTTP JSON-RPC).
 
@@ -57,7 +57,7 @@ Every tool returns this envelope:
 
 **Mutating**: `add_to_cart` (page-local, not supported on remote MCP), `buy_item` **[CONSEQUENTIAL]**, `checkout` **[CONSEQUENTIAL]** (page-local cart)
 
-**Featured product**: Signal Mug (`signal-mug`), $48 AUD. Start here.
+**Featured product**: Microduck (`microduck`), $399 USD. Start here.
 
 ## Remote MCP (if not using WebMCP)
 
@@ -73,7 +73,7 @@ Every tool returns this envelope:
 {
   "jsonrpc": "2.0",
   "method": "tools/call",
-  "params": { "name": "buy_item", "arguments": { "sku": "signal-mug", "qty": 1 } },
+  "params": { "name": "buy_item", "arguments": { "sku": "microduck", "qty": 1 } },
   "id": 2
 }
 ```

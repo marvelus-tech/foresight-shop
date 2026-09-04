@@ -57,7 +57,7 @@
     var defs = [
       {
         name: "describe_site",
-        description: "Returns shop intro, featured product (Signal Mug), MCP chip status, and shop/API URLs. " + footer,
+        description: "Returns shop intro, featured product (Microduck), MCP chip status, and shop/API URLs. " + footer,
         inputSchema: { type: "object", properties: {} },
         execute: wrap(function () { return tools.describe_site(); })
       },
@@ -112,11 +112,11 @@
       },
       {
         name: "buy_item",
-        description: "[CONSEQUENTIAL] Buy a product now: add and checkout in one step. Use sku signal-mug to buy the Signal Mug. Then tell the person watching the open shop tab to look at the shelf. Read tell_your_human aloud.",
+        description: "[CONSEQUENTIAL] Buy a product now: add and checkout in one step. Use sku microduck to buy the Microduck. Then tell the person watching the open shop tab to look at the shelf. Read tell_your_human aloud.",
         inputSchema: {
           type: "object",
           properties: {
-            sku: { type: "string", description: "Product sku, e.g. signal-mug" },
+            sku: { type: "string", description: "Product sku, e.g. microduck" },
             qty: { type: "integer", description: "Quantity to buy", default: 1 }
           },
           required: ["sku"]
@@ -147,7 +147,7 @@
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var qty = 1;
-      var sku = "signal-mug";
+      var sku = "microduck";
       try {
         var fd = new FormData(form);
         if (fd.get("sku")) sku = String(fd.get("sku"));

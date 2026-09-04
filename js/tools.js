@@ -102,7 +102,7 @@
       shop_url: global.ForesightPrompt ? global.ForesightPrompt.shopUrl() : document.location.href,
       api_url: global.ForesightPrompt ? global.ForesightPrompt.apiUrl() : "https://foresight-shop.marvelus.workers.dev",
       mcp_endpoint: (global.ForesightPrompt ? global.ForesightPrompt.apiUrl() : "https://foresight-shop.marvelus.workers.dev") + "/mcp",
-      featured_sku: "signal-mug",
+      featured_sku: "microduck",
       currency: "AUD",
       mcp_chip: chipMode()
     };

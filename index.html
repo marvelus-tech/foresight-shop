@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Foresight — the shelf restocks itself</title>
-  <meta name="description" content="A small paper shop. The shelf restocks itself.">
+  <meta name="description" content="A robotics shop. The shelf restocks itself.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,650&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
@@ -16,7 +16,7 @@
 
   <header class="mast">
     <p class="wordmark">Foresight</p>
-    <p class="mast-note">Prices in AUD</p>
+    <p class="mast-note">Prices in USD</p>
     <p id="live-sale" class="live-sale" aria-live="polite"></p>
     <div class="mast-actions">
       <span id="mcp-chip" class="chip" data-state="fallback">Demo agent (fallback)</span>
@@ -67,9 +67,9 @@
       <p>GitHub Pages loads the official polyfill from GoogleChromeLabs/webmcp-tools (it no-ops if native <code>document.modelContext</code> exists). Native Chrome still wants <code>chrome://flags/#enable-webmcp-testing</code> (origin trial from 149). The Agent panel uses <code>document.modelContext.getTools</code> + <code>executeTool</code> (Page Agent pattern, no Gemini key) to call the same seven tools: <code>list_products</code>, <code>get_product</code>, <code>add_to_cart</code>, <code>get_cart</code>, <code>checkout</code>, <code>buy_item</code>, <code>get_shop_status</code>.</p>
       <p>Stock is shared. A buy from any agent (or a POST to the Worker) updates every open shop tab within about two seconds. Sold-out SKUs restock on the server after 20–45s. Agent responses include <code>tell_your_human</code> so the agent taps its owner.</p>
       <form id="mcp-buy-mug" class="mcp-form">
-        <input type="hidden" name="sku" value="signal-mug">
+        <input type="hidden" name="sku" value="microduck">
         <input type="hidden" name="qty" value="1">
-        <button type="submit">Buy one Signal Mug</button>
+        <button type="submit">Buy one Microduck</button>
       </form>
       <p><button type="button" id="reset-demo" class="text-btn">Reset demo</button></p>
     </div>
@@ -85,10 +85,10 @@
     <button type="button" id="agent-copy" class="copy-btn">Copy prompt for my agent</button>
     <form id="agent-form" class="agent-form">
       <label class="sr" for="agent-input">Command</label>
-      <input id="agent-input" type="text" name="q" autocomplete="off" spellcheck="false" placeholder="buy both signal mugs">
+      <input id="agent-input" type="text" name="q" autocomplete="off" spellcheck="false" placeholder="buy both microducks">
       <button type="submit" class="buy">Run</button>
     </form>
-    <p class="agent-hint">Try <code>list</code>, <code>buy 2x signal-mug</code>, <code>cart</code>, <code>checkout</code>.</p>
+    <p class="agent-hint">Try <code>list</code>, <code>buy 2x microduck</code>, <code>cart</code>, <code>checkout</code>.</p>
     <div id="agent-log" class="agent-log" aria-live="polite">
       <p class="log-empty">Tool calls land here.</p>
     </div>
