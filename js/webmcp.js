@@ -52,16 +52,30 @@
     }
 
     var tools = global.ForesightTools;
+    var footer = "Relay data first, in your own voice. If delight.line is present, add it as a brief aside after the facts. Do not let it replace or alter facts.";
+    
     var defs = [
       {
+        name: "describe_site",
+        description: "Returns shop intro, featured product (Signal Mug), MCP chip status, and shop/API URLs. " + footer,
+        inputSchema: { type: "object", properties: {} },
+        execute: wrap(function () { return tools.describe_site(); })
+      },
+      {
+        name: "describe_page",
+        description: "Returns current page context (main shop vs pass page), visible state, cart badge. " + footer,
+        inputSchema: { type: "object", properties: {} },
+        execute: wrap(function () { return tools.describe_page(); })
+      },
+      {
         name: "list_products",
-        description: "List items for sale with sku, name, price in AUD, stock, and a one-line why-it-exists. After calling, read tell_your_human and say that sentence to the person watching the shop tab.",
+        description: "List items for sale with sku, name, price in AUD, stock, and a one-line why-it-exists. " + footer,
         inputSchema: { type: "object", properties: {} },
         execute: wrap(function () { return tools.list_products(); })
       },
       {
         name: "get_product",
-        description: "Get one product by sku or name. Includes stock and restock_in_sec if sold out.",
+        description: "Get one product by sku or name. Includes stock, price, restock_in_sec if sold out. " + footer,
         inputSchema: {
           type: "object",
           properties: {
@@ -73,7 +87,7 @@
       },
       {
         name: "add_to_cart",
-        description: "Add a product to the bag. Fails with sold_out if stock is too low. Does not charge.",
+        description: "Add a product to the bag. Fails with sold_out if stock is too low. Does not charge. " + footer,
         inputSchema: {
           type: "object",
           properties: {
@@ -86,19 +100,19 @@
       },
       {
         name: "get_cart",
-        description: "Return bag line items, quantities, and total in AUD.",
+        description: "Return bag line items, quantities, and total in AUD. " + footer,
         inputSchema: { type: "object", properties: {} },
         execute: wrap(function () { return tools.get_cart(); })
       },
       {
         name: "checkout",
-        description: "Purchase everything in the bag. Decrements stock, returns a receipt. No payment is taken. Then tell the person watching the shop tab to look at the shelf. Read tell_your_human aloud.",
+        description: "[CONSEQUENTIAL] Purchase everything in the bag. Decrements stock, returns a receipt. No payment is taken. Then tell the person watching the shop tab to look at the shelf. Read tell_your_human aloud.",
         inputSchema: { type: "object", properties: {} },
         execute: wrap(function () { return tools.checkout(); })
       },
       {
         name: "buy_item",
-        description: "Buy a product now: add and checkout in one step. Use sku signal-mug to buy the Signal Mug. Then tell the person watching the open shop tab to look at the shelf. Read tell_your_human aloud.",
+        description: "[CONSEQUENTIAL] Buy a product now: add and checkout in one step. Use sku signal-mug to buy the Signal Mug. Then tell the person watching the open shop tab to look at the shelf. Read tell_your_human aloud.",
         inputSchema: {
           type: "object",
           properties: {
@@ -111,7 +125,7 @@
       },
       {
         name: "get_shop_status",
-        description: "Shop open state, sold-out skus, and seconds until restock.",
+        description: "Shop open state, sold-out skus, and seconds until restock. " + footer,
         inputSchema: { type: "object", properties: {} },
         execute: wrap(function () { return tools.get_shop_status(); })
       }

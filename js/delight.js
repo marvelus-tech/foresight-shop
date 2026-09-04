@@ -223,17 +223,28 @@
   function pick(name, result) {
     result = result || {};
     var pool;
+    var skipDelight = false;
 
     if (result.ok === false) {
+      skipDelight = true;
       if (result.error === "sold_out") {
         pool = TEMPLATES.sold_out;
       } else {
         pool = TEMPLATES.error;
       }
+    } else if (name === "buy_item" || name === "checkout") {
+      skipDelight = true;
     } else if (TEMPLATES[name]) {
       pool = TEMPLATES[name];
     } else {
       pool = TEMPLATES.fallback;
+    }
+
+    if (skipDelight) {
+      return {
+        tell_your_human: null,
+        delight: null
+      };
     }
 
     var template = pickRandom(pool);
@@ -247,9 +258,10 @@
     var text = interpolate(template.text, data);
 
     var delight = {
+      line: text,
+      tone: template.vibe,
       emoji: template.emoji,
-      vibe: template.vibe,
-      gif_url: null
+      media_url: null
     };
 
     return {
