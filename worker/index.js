@@ -467,54 +467,45 @@ async function handleMcpRequest(request, env) {
       }
 
       const stub = env.SHELF.get(env.SHELF.idFromName("foresight"));
-      const shelfCtx = { storage: stub.storage };
       const shelf = { 
         async load() {
-          let raw = await stub.storage.get("state");
-          if (!raw && env.STOCK) {
-            try {
-              raw = await env.STOCK.get("state", { type: "json" });
-            } catch (err) {
-              raw = null;
+          const stateReq = new Request("https://do/state", { method: "GET" });
+          const stateRes = await stub.fetch(stateReq);
+          const stateData = await stateRes.json();
+          // publicState returns { ok, rev, lastSale, products, for_agent, tell_your_human }
+          // Transform products array back to state shape
+          if (stateData.products && Array.isArray(stateData.products)) {
+            const productsMap = {};
+            for (const p of stateData.products) {
+              productsMap[p.id] = {
+                id: p.id,
+                name: p.name,
+                price: p.price,
+                stock: p.stock,
+                maxStock: p.maxStock,
+                restockSec: p.restockSec,
+                flavor: p.flavor || "",
+                restockAt: p.restock_in_sec ? Date.now() + (p.restock_in_sec * 1000) : null
+              };
             }
-          }
-          const base = raw && raw.products ? raw : seedState();
-          const { state, changed } = applyRestocks(base);
-          if (changed) await stub.storage.put("state", state);
-          return state;
-        },
-        async buy(sku, qty) {
-          qty = Math.floor(Number(qty));
-          if (!Number.isFinite(qty) || qty < 1) return { ok: false, error: "invalid_qty", sku };
-          const state = await this.load();
-          const p = find(state, sku);
-          if (!p) return { ok: false, error: "not_found", sku };
-          if (p.stock < qty) {
-            const eta = p.restockAt ? Math.max(0, Math.ceil((p.restockAt - Date.now()) / 1000)) : 30;
             return {
-              ok: false,
-              error: "sold_out",
-              sku: p.id,
-              restock_in_sec: p.restockAt ? eta : null,
-              tell_your_human: "Tell your human: that item is sold out on the open Foresight tab. It restocks in about " + eta + " seconds."
+              rev: stateData.rev,
+              products: productsMap,
+              lastSale: stateData.lastSale,
+              orderSeq: stateData.orderSeq || 1
             };
           }
-          p.stock -= qty;
-          if (p.stock === 0) p.restockAt = Date.now() + p.restockSec * 1000;
-          state.rev += 1;
-          const order_id = "FS-" + String(state.orderSeq++).padStart(4, "0");
-          state.lastSale = { sku: p.id, name: p.name, qty, remaining: p.stock, order_id, at: Date.now() };
-          await stub.storage.put("state", state);
-          return {
-            ok: true,
-            order_id,
-            sku: p.id,
-            name: p.name,
-            qty,
-            remaining: p.stock,
-            total: p.price * qty,
-            currency: "AUD"
-          };
+          return stateData;
+        },
+        async buy(sku, qty) {
+          const buyReq = new Request("https://do/buy", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ sku, qty })
+          });
+          const buyRes = await stub.fetch(buyReq);
+          const buyData = await buyRes.json();
+          return buyData;
         }
       };
       
