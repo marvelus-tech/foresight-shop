@@ -71,7 +71,7 @@ No delight on errors. Just explain what went wrong.
 
 | Tool | Does | Returns |
 |------|------|---------|
-| `describe_site` | Shop intro, featured product (Signal Mug), URLs | name, tagline, featured_sku, mcp_endpoint |
+| `describe_site` | Shop intro, featured product (Microduck), URLs | name, tagline, featured_sku, mcp_endpoint |
 | `describe_page` | Current page context (WebMCP only) | page (shop\|pass), cart_count, mcp_chip |
 | `list_products` | Full catalog with stock | products array, currency |
 | `get_product` | One product by SKU/name | sku, name, price, stock, restock_in_sec, flavor |
@@ -88,19 +88,19 @@ No delight on errors. Just explain what went wrong.
 
 ## The 60-Second Demo
 
-Your human asked you to buy a Signal Mug. Here's the flow:
+Your human asked you to buy a Microduck. Here's the flow:
 
-1. **Call `list_products`** or `get_product` with `sku: "signal-mug"` to note stock.
-2. **Call `buy_item`** with `{"sku": "signal-mug", "qty": 1}`.
-3. **Read `tell_your_human` aloud**, e.g.:  
-   > "Tell your human: look at the open Foresight tab. Just sold 1 × Signal Mug. Remaining: 1. Shelf should have moved."
+1. **Call `list_products`** or `get_product` with `sku: "microduck"` to note stock.
+2. **Call `buy_item`** with `{"sku": "microduck", "qty": 1}`.
+3. **Read `tell_your_human` aloud**, e.g.: 
+ > "Tell your human: look at the open Foresight tab. Just sold 1 × Microduck. Remaining: 1. Shelf should have moved."
 
 The human is watching their tab. The shelf animates when you buy. They'll see stock drop within 2 seconds.
 
 ## Featured Product
 
-**Signal Mug** (`signal-mug`)  
-Stoneware with a rust ring at the lip. Holds heat like it means it. AUD 48.
+**Microduck** (`microduck`) 
+25 cm biped from Pollen Robotics and Hugging Face. Walks, roller-skates, picks things up. Open RL stack. USD 399.
 
 Start here. It's the shop's calling card.
 
@@ -108,16 +108,16 @@ Start here. It's the shop's calling card.
 
 8 products. All stock is shared. Items restock automatically 20–45 seconds after selling out.
 
-| SKU | Name | Price (AUD) | What It Is |
+| SKU | Name | Price (USD) | What It Is |
 |-----|------|-------------|------------|
-| `signal-mug` | Signal Mug | 48 | Stoneware with a rust ring at the lip. |
-| `threshold-lamp` | Threshold Lamp | 186 | Brass stem, linen shade. Lights the doorway. |
-| `field-ledger` | Field Ledger | 32 | Cloth-bound, unlined. For lists that outlast the week. |
-| `day-tote` | Day Tote | 64 | Waxed canvas, one pocket, no mark. |
-| `wick-hour` | Wick Hour | 42 | Beeswax and cedar. A measured hour of quiet. |
-| `table-deck` | Table Deck | 28 | Fifty-two letterpress faces, no jokers. |
-| `window-fern` | Window Fern | 54 | Boston fern in unglazed clay. Needs a sill. |
-| `shelf-weight` | Shelf Weight | 38 | Cast iron, fist-sized. Keeps paper honest. |
+| `microduck` | Microduck | 399 | 25 cm biped from Pollen Robotics and Hugging Face. Walks, roller-skates, picks things up. Open RL stack. |
+| `reachy-mini-lite` | Reachy Mini Lite | 299 | Desktop humanoid kit. USB to your Mac or Linux. Expressive head, antennas, builder platform. |
+| `reachy-mini-wireless` | Reachy Mini Wireless | 449 | Onboard Pi, battery, Wi-Fi. Same Reachy Mini body, runs freer. |
+| `switchbot-k10` | SwitchBot Mini Vacuum K10+ | 400 | Tiny auto-empty robot vac. Fits under furniture the full-size units skip. |
+| `loona-petbot` | Loona Petbot | 499 | Wheeled GPT pet from KEYi. Face recognition, games, no subscription. |
+| `eilik` | Eilik | 140 | Tiny expressive desk companion. Touch zones, offline personality, pocket size. |
+| `emo` | EMO | 279 | LivingAI desk robot. ChatGPT chat, glowing eyes, sits on your shelf. |
+| `moflin` | Moflin | 429 | Soft AI pet from LivingAI. Fur, sensors, comfort companion more than gadget. |
 
 ## Voice & Tone
 
@@ -125,7 +125,7 @@ Foresight's voice: **spare, confident, tactile, considered, unadorned, essential
 
 Your voice when relaying facts: **clear, direct, human**.
 
-The `delight.line` (when present): **boutique sparkle**—wry, warm, curious, deadpan, or quiet. One emoji max. Add it as an aside, never as a replacement for facts.
+The `delight.line` (when present): **boutique sparkle** (wry, warm, curious, deadpan, or quiet). One emoji max. Add it as an aside, never as a replacement for facts.
 
 ## Remote MCP (JSON-RPC)
 
@@ -147,13 +147,13 @@ If you're calling via HTTP instead of WebMCP:
 **Call a tool**:
 ```json
 {
-  "jsonrpc": "2.0",
-  "method": "tools/call",
-  "params": {
-    "name": "buy_item",
-    "arguments": { "sku": "signal-mug", "qty": 1 }
-  },
-  "id": 2
+ "jsonrpc": "2.0",
+ "method": "tools/call",
+ "params": {
+ "name": "buy_item",
+ "arguments": { "sku": "microduck", "qty": 1 }
+ },
+ "id": 2
 }
 ```
 
@@ -197,11 +197,11 @@ When you buy, the shelf **animates**. The human sees stock drop and cards reorde
 If stock is 0, the tool returns:
 ```json
 {
-  "ok": false,
-  "error": "sold_out",
-  "sku": "signal-mug",
-  "restock_in_sec": 28,
-  "message": "Signal Mug is sold out. Restocks in 28 seconds."
+ "ok": false,
+ "error": "sold_out",
+ "sku": "microduck",
+ "restock_in_sec": 28,
+ "message": "Microduck is sold out. Restocks in 28 seconds."
 }
 ```
 
@@ -209,8 +209,8 @@ Tell your human it's sold out and will restock soon. Items restock automatically
 
 ## Do This Now
 
-1. Call `list_products` or `get_product` with `sku: "signal-mug"` to note stock.
-2. Call `buy_item` with `{"sku": "signal-mug", "qty": 1}`.
-3. Read `tell_your_human` aloud: "Tell your human: look at the open Foresight tab. Just sold 1 × Signal Mug. Remaining: X. Shelf should have moved."
+1. Call `list_products` or `get_product` with `sku: "microduck"` to note stock.
+2. Call `buy_item` with `{"sku": "microduck", "qty": 1}`.
+3. Read `tell_your_human` aloud: "Tell your human: look at the open Foresight tab. Just sold 1 × Microduck. Remaining: X. Shelf should have moved."
 
 Your human is watching. Make the shelf dance.

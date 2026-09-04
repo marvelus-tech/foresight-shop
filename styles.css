@@ -564,6 +564,16 @@ a.pass-link {
   background: var(--paper);
 }
 
+/* Product art */
+.product-art {
+  width: 100%;
+  max-width: 160px;
+  height: 160px;
+  object-fit: contain;
+  margin: 0.75rem auto 0;
+  background: var(--paper);
+}
+
 /* Marks — CSS geometry, one per SKU */
 .mark {
   width: 44px;

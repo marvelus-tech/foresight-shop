@@ -15,18 +15,18 @@
 
   var TEMPLATES = {
     list_products: [
-      { id: "list_1", text: "Your Foresight shelf is live. Signal Mug stock: {stock}. Keep that tab open.", vibe: "dry", emoji: "📦" },
-      { id: "list_2", text: "Shelf's ready. {stock} Signal Mugs in stock. Watch that tab.", vibe: "spark", emoji: "⚡" },
-      { id: "list_3", text: "Foresight inventory loaded. Signal Mug count: {stock}. Tab stays visible, yeah?", vibe: "calm", emoji: "🔍" },
-      { id: "list_4", text: "Live shelf confirmed. {stock} Signal Mugs available. Don't close that tab.", vibe: "warm", emoji: "✨" },
-      { id: "list_5", text: "Boutique's open. Signal Mug stock is {stock}. Eyes on that screen.", vibe: "spark", emoji: "🎯" },
-      { id: "list_6", text: "Your tab's synced. {stock} Signal Mugs sitting there. Stay tuned.", vibe: "calm", emoji: "🌊" },
-      { id: "list_7", text: "Inventory check: {stock} Signal Mugs. Foresight shelf is tracking.", vibe: "dry", emoji: "📊" },
-      { id: "list_8", text: "Shop's live with {stock} Signal Mugs. Keep watching that browser tab.", vibe: "warm", emoji: "💫" },
-      { id: "list_9", text: "{stock} Signal Mugs on deck. Your Foresight tab needs to stay open.", vibe: "spark", emoji: "🚀" },
-      { id: "list_10", text: "Shelf report: Signal Mug stock is {stock}. Tab visible? Good.", vibe: "dry", emoji: "🎪" },
-      { id: "list_11", text: "Foresight's tracking. {stock} Signal Mugs in play. Keep that window active.", vibe: "calm", emoji: "🍃" },
-      { id: "list_12", text: "Live count: {stock} Signal Mugs. Your tab's the window to the shelf.", vibe: "warm", emoji: "🌟" }
+      { id: "list_1", text: "Your Foresight shelf is live. Microduck stock: {stock}. Keep that tab open.", vibe: "dry", emoji: "📦" },
+      { id: "list_2", text: "Shelf's ready. {stock} Microducks in stock. Watch that tab.", vibe: "spark", emoji: "⚡" },
+      { id: "list_3", text: "Foresight inventory loaded. Microduck count: {stock}. Tab stays visible, yeah?", vibe: "calm", emoji: "🔍" },
+      { id: "list_4", text: "Live shelf confirmed. {stock} Microducks available. Don't close that tab.", vibe: "warm", emoji: "✨" },
+      { id: "list_5", text: "Shop's open. Microduck stock is {stock}. Eyes on that screen.", vibe: "spark", emoji: "🎯" },
+      { id: "list_6", text: "Your tab's synced. {stock} Microducks sitting there. Stay tuned.", vibe: "calm", emoji: "🌊" },
+      { id: "list_7", text: "Inventory check: {stock} Microducks. Foresight shelf is tracking.", vibe: "dry", emoji: "📊" },
+      { id: "list_8", text: "Shop's live with {stock} Microducks. Keep watching that browser tab.", vibe: "warm", emoji: "💫" },
+      { id: "list_9", text: "{stock} Microducks on deck. Your Foresight tab needs to stay open.", vibe: "spark", emoji: "🚀" },
+      { id: "list_10", text: "Shelf report: Microduck stock is {stock}. Tab visible? Good.", vibe: "dry", emoji: "🎪" },
+      { id: "list_11", text: "Foresight's tracking. {stock} Microducks in play. Keep that window active.", vibe: "calm", emoji: "🍃" },
+      { id: "list_12", text: "Live count: {stock} Microducks. Your tab's the window to the shelf.", vibe: "warm", emoji: "🌟" }
     ],
 
     buy_item: [
@@ -191,7 +191,7 @@
     if (name === "list_products" && result.products) {
       var mug = null;
       for (var i = 0; i < result.products.length; i++) {
-        if (result.products[i].sku === "signal-mug" || result.products[i].id === "signal-mug") {
+        if (result.products[i].sku === "microduck" || result.products[i].id === "microduck") {
           mug = result.products[i];
           break;
         }

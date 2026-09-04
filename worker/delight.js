@@ -4,33 +4,33 @@ const RECENT_LIMIT = 5;
 
 const TEMPLATES = {
   list_products: [
-    { id: "list_1", text: "Your Foresight shelf is live. Signal Mug stock: {stock}. Keep that tab open.", tone: "dry", emoji: "📦" },
-    { id: "list_2", text: "Shelf's ready. {stock} Signal Mugs in stock. Watch that tab.", tone: "spark", emoji: "⚡" },
-    { id: "list_3", text: "Foresight inventory loaded. Signal Mug count: {stock}. Tab stays visible, yeah?", tone: "calm", emoji: "🔍" },
-    { id: "list_4", text: "Live shelf confirmed. {stock} Signal Mugs available. Don't close that tab.", tone: "warm", emoji: "✨" },
-    { id: "list_5", text: "Boutique's open. Signal Mug stock is {stock}. Eyes on that screen.", tone: "spark", emoji: "🎯" },
-    { id: "list_6", text: "Your tab's synced. {stock} Signal Mugs sitting there. Stay tuned.", tone: "calm", emoji: "🌊" },
-    { id: "list_7", text: "Inventory check: {stock} Signal Mugs. Foresight shelf is tracking.", tone: "dry", emoji: "📊" },
-    { id: "list_8", text: "Shop's live with {stock} Signal Mugs. Keep watching that browser tab.", tone: "warm", emoji: "💫" },
-    { id: "list_9", text: "{stock} Signal Mugs on deck. Your Foresight tab needs to stay open.", tone: "spark", emoji: "🚀" },
-    { id: "list_10", text: "Shelf report: Signal Mug stock is {stock}. Tab visible? Good.", tone: "dry", emoji: "🎪" },
-    { id: "list_11", text: "Foresight's tracking. {stock} Signal Mugs in play. Keep that window active.", tone: "calm", emoji: "🍃" },
-    { id: "list_12", text: "Live count: {stock} Signal Mugs. Your tab's the window to the shelf.", tone: "warm", emoji: "🌟" }
+    { id: "list_1", text: "Your Foresight shelf is live. Microduck stock: {stock}. Keep that tab open.", tone: "dry", emoji: "📦" },
+    { id: "list_2", text: "Shelf's ready. {stock} Microducks in stock. Watch that tab.", tone: "spark", emoji: "⚡" },
+    { id: "list_3", text: "Foresight inventory loaded. Microduck count: {stock}. Tab stays visible, yeah?", tone: "calm", emoji: "🔍" },
+    { id: "list_4", text: "Live shelf confirmed. {stock} Microducks available. Don't close that tab.", tone: "warm", emoji: "✨" },
+    { id: "list_5", text: "Shop's open. Microduck stock is {stock}. Eyes on that screen.", tone: "spark", emoji: "🎯" },
+    { id: "list_6", text: "Your tab's synced. {stock} Microducks sitting there. Stay tuned.", tone: "calm", emoji: "🌊" },
+    { id: "list_7", text: "Inventory check: {stock} Microducks. Foresight shelf is tracking.", tone: "dry", emoji: "📊" },
+    { id: "list_8", text: "Shop's live with {stock} Microducks. Keep watching that browser tab.", tone: "warm", emoji: "💫" },
+    { id: "list_9", text: "{stock} Microducks on deck. Your Foresight tab needs to stay open.", tone: "spark", emoji: "🚀" },
+    { id: "list_10", text: "Shelf report: Microduck stock is {stock}. Tab visible? Good.", tone: "dry", emoji: "🎪" },
+    { id: "list_11", text: "Foresight's tracking. {stock} Microducks in play. Keep that window active.", tone: "calm", emoji: "🍃" },
+    { id: "list_12", text: "Live count: {stock} Microducks. Your tab's the window to the shelf.", tone: "warm", emoji: "🌟" }
   ],
 
   get_product: [
-    { id: "product_1", text: "{name}: {stock} in stock, {price} AUD. Your Foresight tab's got the live view.", tone: "dry", emoji: "📦" },
-    { id: "product_2", text: "Found {name}. Stock: {stock}, price {price} AUD. Tab's tracking it.", tone: "calm", emoji: "🔍" },
-    { id: "product_3", text: "{name} spotted. {stock} available at {price} AUD. Keep watching that tab.", tone: "spark", emoji: "✨" },
-    { id: "product_4", text: "Product check: {name}, {stock} units, {price} AUD. Foresight shelf's live.", tone: "warm", emoji: "💫" },
-    { id: "product_5", text: "{name} details: {stock} in stock, {price} AUD. Your tab's synced.", tone: "dry", emoji: "📊" },
-    { id: "product_6", text: "Located {name}. Inventory: {stock}, cost {price} AUD. Tab shows it live.", tone: "spark", emoji: "🎯" },
-    { id: "product_7", text: "{name} — {stock} available, {price} AUD. Foresight's reflecting reality.", tone: "calm", emoji: "🌊" },
-    { id: "product_8", text: "Item found: {name}, {stock} on shelf, {price} AUD. Tab's the window.", tone: "warm", emoji: "🌟" },
-    { id: "product_9", text: "{name}: stock {stock}, price {price} AUD. Your Foresight tab's accurate.", tone: "dry", emoji: "🎪" },
-    { id: "product_10", text: "Product {name} loaded. {stock} units at {price} AUD. Watch that screen.", tone: "spark", emoji: "🚀" },
-    { id: "product_11", text: "{name} info: {stock} in stock, {price} AUD. Tab's your guide.", tone: "calm", emoji: "🍃" },
-    { id: "product_12", text: "Retrieved {name}. {stock} available, {price} AUD. Foresight shelf's live.", tone: "warm", emoji: "💥" }
+    { id: "product_1", text: "{name}: {stock} in stock, {price} USD. Your Foresight tab's got the live view.", tone: "dry", emoji: "📦" },
+    { id: "product_2", text: "Found {name}. Stock: {stock}, price {price} USD. Tab's tracking it.", tone: "calm", emoji: "🔍" },
+    { id: "product_3", text: "{name} spotted. {stock} available at {price} USD. Keep watching that tab.", tone: "spark", emoji: "✨" },
+    { id: "product_4", text: "Product check: {name}, {stock} units, {price} USD. Foresight shelf's live.", tone: "warm", emoji: "💫" },
+    { id: "product_5", text: "{name} details: {stock} in stock, {price} USD. Your tab's synced.", tone: "dry", emoji: "📊" },
+    { id: "product_6", text: "Located {name}. Inventory: {stock}, cost {price} USD. Tab shows it live.", tone: "spark", emoji: "🎯" },
+    { id: "product_7", text: "{name} — {stock} available, {price} USD. Foresight's reflecting reality.", tone: "calm", emoji: "🌊" },
+    { id: "product_8", text: "Item found: {name}, {stock} on shelf, {price} USD. Tab's the window.", tone: "warm", emoji: "🌟" },
+    { id: "product_9", text: "{name}: stock {stock}, price {price} USD. Your Foresight tab's accurate.", tone: "dry", emoji: "🎪" },
+    { id: "product_10", text: "Product {name} loaded. {stock} units at {price} USD. Watch that screen.", tone: "spark", emoji: "🚀" },
+    { id: "product_11", text: "{name} info: {stock} in stock, {price} USD. Tab's your guide.", tone: "calm", emoji: "🍃" },
+    { id: "product_12", text: "Retrieved {name}. {stock} available, {price} USD. Foresight shelf's live.", tone: "warm", emoji: "💥" }
   ],
 
   add_to_cart: [
@@ -79,12 +79,12 @@ const TEMPLATES = {
   ],
 
   describe_site: [
-    { id: "site_1", text: "Foresight's a boutique paper shop. Shelf restocks itself. Signal Mug's featured.", tone: "dry", emoji: "📦" },
-    { id: "site_2", text: "Small shop, live shelf. Signal Mug at the top. Keep your tab visible.", tone: "calm", emoji: "🔍" },
-    { id: "site_3", text: "Boutique's running. Featured: Signal Mug. Tab shows the shelf in real-time.", tone: "spark", emoji: "✨" },
-    { id: "site_4", text: "Foresight shop intro pulled. Signal Mug's the star. Your tab's synced.", tone: "warm", emoji: "💫" },
-    { id: "site_5", text: "Shop details loaded. Signal Mug featured. Foresight shelf's tracking.", tone: "dry", emoji: "📊" },
-    { id: "site_6", text: "Boutique overview: Signal Mug up front. Tab's your live feed.", tone: "spark", emoji: "🎯" }
+    { id: "site_1", text: "Foresight's a robotics shop. Shelf restocks itself. Microduck's featured.", tone: "dry", emoji: "📦" },
+    { id: "site_2", text: "Shop's live. Microduck at the top. Keep your tab visible.", tone: "calm", emoji: "🔍" },
+    { id: "site_3", text: "Shop's running. Featured: Microduck. Tab shows the shelf in real-time.", tone: "spark", emoji: "✨" },
+    { id: "site_4", text: "Foresight shop intro pulled. Microduck's the star. Your tab's synced.", tone: "warm", emoji: "💫" },
+    { id: "site_5", text: "Shop details loaded. Microduck featured. Foresight shelf's tracking.", tone: "dry", emoji: "📊" },
+    { id: "site_6", text: "Shop overview: Microduck up front. Tab's your live feed.", tone: "spark", emoji: "🎯" }
   ],
 
   describe_page: [
@@ -138,7 +138,7 @@ function extractData(name, result) {
   const data = {};
   
   if (name === "list_products" && result.products) {
-    const mug = result.products.find(p => p.sku === "signal-mug" || p.id === "signal-mug");
+    const mug = result.products.find(p => p.sku === "microduck" || p.id === "microduck");
     data.stock = mug ? mug.stock : "?";
   }
 

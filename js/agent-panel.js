@@ -13,9 +13,10 @@
     return String(s || "")
       .trim()
       .toLowerCase()
-      .replace(/\bthe signal mugs?\b/g, "signal-mug")
-      .replace(/\bsignal mugs?\b/g, "signal-mug")
-      .replace(/\bthe mug\b/g, "signal-mug")
+      .replace(/\bthe microducks?\b/g, "microduck")
+      .replace(/\bmicroducks?\b/g, "microduck")
+      .replace(/\bthe duck\b/g, "microduck")
+      .replace(/\bthe robot duck\b/g, "microduck")
       .replace(/\bthreshold lamps?\b/g, "threshold-lamp")
       .replace(/\bfield ledgers?\b/g, "field-ledger")
       .replace(/\bday totes?\b/g, "day-tote")
@@ -31,7 +32,7 @@
     var s = slug(raw);
     var list = global.shop.list();
     var i, p, nameSlug;
-    if (s === "mug" || s === "the-mug") return "signal-mug";
+    if (s === "duck" || s === "the-duck" || s === "robot-duck") return "microduck";
     for (i = 0; i < list.length; i++) {
       p = list[i];
       if (p.id === s || p.sku === s) return p.id;
@@ -151,7 +152,7 @@
     if (global.ForesightPrompt && typeof global.ForesightPrompt.agentText === "function") {
       return global.ForesightPrompt.agentText();
     }
-    return "Buy one Signal Mug from https://marvelus-tech.github.io/foresight-shop/ then tell your human to watch the shelf.";
+    return "Buy one Microduck from https://marvelus-tech.github.io/foresight-shop/ then tell your human to watch the shelf.";
   }
 
   function copyPrompt() {
@@ -254,7 +255,7 @@
         var listed = await ctx.getTools();
         var names = listed.map(function (t) { return t.name; }).filter(Boolean);
         if (names.length) {
-          hint.innerHTML = "Tools: <code>" + names.join("</code>, <code>") + "</code>. Try <code>list</code>, <code>buy 2x signal-mug</code>, <code>cart</code>, <code>checkout</code>.";
+          hint.innerHTML = "Tools: <code>" + names.join("</code>, <code>") + "</code>. Try <code>list</code>, <code>buy 2x microduck</code>, <code>cart</code>, <code>checkout</code>.";
         }
       } catch (err) { /* ignore */ }
     }

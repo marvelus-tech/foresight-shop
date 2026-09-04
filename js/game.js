@@ -5,17 +5,17 @@
   var STORAGE_KEY = "foresight-shop-v1";
   var TICK_MS = 15000;
   var NEW_STOCK_MS = 4000;
-  var CURRENCY = "AUD";
+  var CURRENCY = "USD";
 
   var FALLBACK_CATALOG = [
-    { id: "signal-mug", name: "Signal Mug", price: 48, stock: 2, maxStock: 6, restockSec: 30, flavor: "Stoneware with a rust ring at the lip. Holds heat like it means it." },
-    { id: "threshold-lamp", name: "Threshold Lamp", price: 186, stock: 3, maxStock: 4, restockSec: 40, flavor: "Brass stem, linen shade. Lights the doorway, not the room." },
-    { id: "field-ledger", name: "Field Ledger", price: 32, stock: 5, maxStock: 8, restockSec: 22, flavor: "Cloth-bound, unlined. For lists that outlast the week." },
-    { id: "day-tote", name: "Day Tote", price: 64, stock: 4, maxStock: 6, restockSec: 28, flavor: "Waxed canvas, one pocket, no mark. The bag that disappears." },
-    { id: "wick-hour", name: "Wick Hour", price: 42, stock: 4, maxStock: 8, restockSec: 24, flavor: "Beeswax and cedar. A measured hour of quiet." },
-    { id: "table-deck", name: "Table Deck", price: 28, stock: 6, maxStock: 10, restockSec: 20, flavor: "Fifty-two letterpress faces, no jokers. For the long game." },
-    { id: "window-fern", name: "Window Fern", price: 54, stock: 3, maxStock: 5, restockSec: 36, flavor: "Boston fern in unglazed clay. Needs a sill and patience." },
-    { id: "shelf-weight", name: "Shelf Weight", price: 38, stock: 5, maxStock: 7, restockSec: 26, flavor: "Cast iron, fist-sized. Keeps paper, and the shelf, honest." }
+    { id: "microduck", name: "Microduck", price: 399, stock: 3, maxStock: 5, restockSec: 32, flavor: "25 cm biped from Pollen Robotics and Hugging Face. Walks, roller-skates, picks things up. Open RL stack.", image: "images/microduck.png" },
+    { id: "reachy-mini-lite", name: "Reachy Mini Lite", price: 299, stock: 4, maxStock: 6, restockSec: 28, flavor: "Desktop humanoid kit. USB to your Mac or Linux. Expressive head, antennas, builder platform.", image: "images/reachy-mini-lite.png" },
+    { id: "reachy-mini-wireless", name: "Reachy Mini Wireless", price: 449, stock: 2, maxStock: 4, restockSec: 40, flavor: "Onboard Pi, battery, Wi-Fi. Same Reachy Mini body, runs freer.", image: "images/reachy-mini-wireless.png" },
+    { id: "switchbot-k10", name: "SwitchBot Mini Vacuum K10+", price: 400, stock: 3, maxStock: 5, restockSec: 36, flavor: "Tiny auto-empty robot vac. Fits under furniture the full-size units skip.", image: "images/switchbot-k10.png" },
+    { id: "loona-petbot", name: "Loona Petbot", price: 499, stock: 3, maxStock: 5, restockSec: 34, flavor: "Wheeled GPT pet from KEYi. Face recognition, games, no subscription.", image: "images/loona-petbot.png" },
+    { id: "eilik", name: "Eilik", price: 140, stock: 5, maxStock: 8, restockSec: 22, flavor: "Tiny expressive desk companion. Touch zones, offline personality, pocket size.", image: "images/eilik.png" },
+    { id: "emo", name: "EMO", price: 279, stock: 4, maxStock: 6, restockSec: 26, flavor: "LivingAI desk robot. ChatGPT chat, glowing eyes, sits on your shelf.", image: "images/emo.png" },
+    { id: "moflin", name: "Moflin", price: 429, stock: 3, maxStock: 5, restockSec: 30, flavor: "Soft AI pet from LivingAI. Fur, sensors, comfort companion more than gadget.", image: "images/moflin.png" }
   ];
 
   var seed = FALLBACK_CATALOG.map(copy);
@@ -36,7 +36,8 @@
       stock: p.stock,
       maxStock: p.maxStock,
       restockSec: p.restockSec,
-      flavor: p.flavor
+      flavor: p.flavor,
+      image: p.image
     };
   }
 
@@ -149,6 +150,7 @@
       maxStock: p.maxStock,
       restockSec: p.restockSec,
       flavor: p.flavor,
+      image: p.image || "",
       soldOut: soldOut,
       restocking: soldOut && eta != null,
       restock_in_sec: eta,

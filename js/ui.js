@@ -16,9 +16,9 @@
   }
 
   function money(n) {
-    return new Intl.NumberFormat("en-AU", {
+    return new Intl.NumberFormat("en-US", {
       style: "currency",
-      currency: "AUD",
+      currency: "USD",
       minimumFractionDigits: 0
     }).format(n);
   }
@@ -167,11 +167,15 @@
     var stockLine = sold
       ? '<p class="stock">Sold out</p>'
       : '<p class="stock"><span class="count">' + product.stock + "</span> left</p>";
+    var productImage = product.image
+      ? '<img class="product-art" src="' + escapeHtml(product.image) + '" alt="' + escapeHtml(product.name) + '" loading="lazy">'
+      : "";
     return (
       '<article class="' + cls + '" data-sku="' + escapeHtml(product.sku) + '">' +
         '<span class="hit-ring" aria-hidden="true"></span>' +
         ribbon +
         '<div class="mark mark-' + escapeHtml(product.sku) + '" aria-hidden="true"></div>' +
+        productImage +
         '<h2 class="name">' + escapeHtml(product.name) + "</h2>" +
         '<p class="flavor">' + escapeHtml(product.flavor) + "</p>" +
         '<p class="price">' + money(product.price) + "</p>" +
