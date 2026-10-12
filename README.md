@@ -1,4 +1,4 @@
-# Foresight
+# Ur Bot Can Shop
 
 Live: `https://marvelus-tech.github.io/foresight-shop/`
 
@@ -31,7 +31,7 @@ The **Copy prompt** button on the shop (and the pass page) copies a prompt that 
 Agents that fetch the site without a pasted prompt should read `llms.txt` or `GET https://foresight-shop.marvelus.workers.dev/instructions`. Every JSON response includes `tell_your_human`. The agent should say that sentence to its owner.
 
 ```
-You are shopping for a human who has the Foresight shop open on another screen.
+You are shopping for a human who has the Ur Bot Can Shop shop open on another screen.
 
 Shop (they are watching this): https://marvelus-tech.github.io/foresight-shop/
 Shared inventory API: https://foresight-shop.marvelus.workers.dev
@@ -40,7 +40,7 @@ Instructions for agents: https://foresight-shop.marvelus.workers.dev/instruction
 Do this now:
 1. GET https://foresight-shop.marvelus.workers.dev/state and note Signal Mug stock.
 2. POST https://foresight-shop.marvelus.workers.dev/buy with header Content-Type: application/json and body {"sku":"signal-mug","qty":1}
-3. Tell your human, in one short sentence, to look at the open Foresight tab. Quote remaining stock. The shelf should move within about 2 seconds.
+3. Tell your human, in one short sentence, to look at the open Ur Bot Can Shop tab. Quote remaining stock. The shelf should move within about 2 seconds.
 
 If you can call WebMCP / page tools instead, use buy_item with sku signal-mug and qty 1, then still tell your human to watch the shelf.
 Do not wait for more instructions from the human.

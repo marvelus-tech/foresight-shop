@@ -27,14 +27,14 @@
     var shop = shopUrl();
     var api = apiUrl();
     return (
-      "You are shopping for a human who has the Foresight shop open on another screen.\n\n" +
+      "You are shopping for a human who has Ur Bot Can Shop open on another screen.\n\n" +
       "Shop (they are watching this): " + shop + "\n" +
       "Shared inventory API: " + api + "\n" +
       "Instructions for agents: " + api + "/instructions\n\n" +
       "Do this now:\n" +
       "1. GET " + api + "/state and note Microduck stock.\n" +
       "2. POST " + api + "/buy with header Content-Type: application/json and body {\"sku\":\"microduck\",\"qty\":1}\n" +
-      "3. Tell your human, in one short sentence, to look at the open Foresight tab. Quote remaining stock. The shelf should move within about 2 seconds.\n\n" +
+      "3. Tell your human, in one short sentence, to look at the open Ur Bot Can Shop tab. Quote remaining stock. The shelf should move within about 2 seconds.\n\n" +
       "If you can call WebMCP / page tools instead, use buy_item with sku microduck and qty 1, then still tell your human to watch the shelf.\n" +
       "Do not wait for more instructions from the human."
     );
@@ -52,14 +52,14 @@
         }
       }
       var n = mug ? mug.stock : "?";
-      return "Tell your human: the Foresight shelf is live. Microduck stock is " + n + ". Keep that tab visible.";
+      return "Tell your human: the Ur Bot Can Shop shelf is live. Microduck stock is " + n + ". Keep that tab visible.";
     }
     if (result.ok === false) {
       if (result.error === "sold_out") {
         var eta = result.restock_in_sec != null ? result.restock_in_sec : 30;
-        return "Tell your human: that item is sold out on the open Foresight tab. It restocks in about " + eta + " seconds.";
+        return "Tell your human: that item is sold out on the open Ur Bot Can Shop tab. It restocks in about " + eta + " seconds.";
       }
-      return "Tell your human: the buy did not go through (" + (result.error || "error") + "). Look at the open Foresight tab.";
+      return "Tell your human: the buy did not go through (" + (result.error || "error") + "). Look at the open Ur Bot Can Shop tab.";
     }
     if (name === "buy_item" || name === "checkout" || result.order_id) {
       var itemName = result.name;
@@ -72,12 +72,12 @@
       }
       itemName = itemName || "item";
       qty = qty || 1;
-      var msg = "Tell your human: look at the open Foresight tab. Just sold " + qty + " \u00d7 " + itemName + ".";
+      var msg = "Tell your human: look at the open Ur Bot Can Shop tab. Just sold " + qty + " \u00d7 " + itemName + ".";
       if (remaining != null) msg += " Remaining: " + remaining + ".";
       msg += " The shelf should already have moved.";
       return msg;
     }
-    return "Tell your human to keep the Foresight shop tab visible. A buy will move the shelf within about 2 seconds.";
+    return "Tell your human to keep the Ur Bot Can Shop tab visible. A buy will move the shelf within about 2 seconds.";
   }
 
   function withHint(name, result) {

@@ -62,13 +62,13 @@
     if (tool === "buy_item" && result.ok && result.name) {
       var qty = result.qty || 1;
       var remaining = result.remaining != null ? result.remaining : "?";
-      return "Tell your human: look at the open Foresight tab. Just sold " + qty + " × " + result.name + ". Remaining: " + remaining + ". Shelf should have moved.";
+      return "Tell your human: look at the open Ur Bot Can Shop tab. Just sold " + qty + " × " + result.name + ". Remaining: " + remaining + ". Shelf should have moved.";
     }
     if (tool === "checkout" && result.ok && result.items && result.items[0]) {
       var item = result.items[0];
       var qtyC = item.qty || 1;
       var remainingC = item.remaining != null ? item.remaining : "?";
-      return "Tell your human: look at the open Foresight tab. Just sold " + qtyC + " × " + item.name + ". Remaining: " + remainingC + ". Shelf should have moved.";
+      return "Tell your human: look at the open Ur Bot Can Shop tab. Just sold " + qtyC + " × " + item.name + ". Remaining: " + remainingC + ". Shelf should have moved.";
     }
     return null;
   }
@@ -83,9 +83,11 @@
     var view = ui();
     var sku = args && (args.sku || (result && result.data && result.data.sku));
     if (view) {
-      if (sku) view.highlightCard(sku);
+      if (sku) view.highlightCard(sku, { scroll: false });
       if (name === "add_to_cart" || name === "buy_item" || name === "checkout") {
+        if (view.renderBadge) view.renderBadge();
         view.bumpCart();
+        if (sku && name === "buy_item" && view.patchCardStock) view.patchCardStock(sku);
       }
     }
     document.dispatchEvent(new CustomEvent("shop:tool", {
@@ -96,7 +98,7 @@
 
   function describe_site() {
     var data = {
-      name: "Foresight",
+      name: "Ur Bot Can Shop",
       tagline: "The shelf restocks itself.",
       description: "A small paper shop. Stock is shared.",
       shop_url: global.ForesightPrompt ? global.ForesightPrompt.shopUrl() : document.location.href,

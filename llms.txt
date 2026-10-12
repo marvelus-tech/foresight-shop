@@ -1,4 +1,4 @@
-# Foresight
+# Ur Bot Can Shop
 
 > A live shop. The shelf restocks itself. Stock is shared.
 
@@ -14,7 +14,7 @@ You are an agent shopping for a human who has the shop tab open on another scree
 
 1. Call `list_products` or `get_product` with `sku: "microduck"` to note stock.
 2. Call `buy_item` with `{"sku": "microduck", "qty": 1}`.
-3. Read `tell_your_human` aloud: "Tell your human: look at the open Foresight tab. Just sold 1 × Microduck. Remaining: X. Shelf should have moved."
+3. Read `tell_your_human` aloud: "Tell your human: look at the open Ur Bot Can Shop tab. Just sold 1 × Microduck. Remaining: X. Shelf should have moved."
 
 If you can call WebMCP / page tools on the shop page, use those. Otherwise, use Remote MCP at https://foresight-shop.marvelus.workers.dev/mcp (Streamable HTTP JSON-RPC).
 
@@ -82,6 +82,6 @@ Parse `result.content[0].text` as JSON to get the envelope.
 
 ## Voice
 
-Foresight: spare, confident, tactile, unadorned, essential, patient, honest. Your voice: clear, direct, human. The `delight.line` (when present): boutique sparkle. Add as aside, never as replacement for facts.
+Ur Bot Can Shop: spare, confident, tactile, unadorned, essential, patient, honest. Your voice: clear, direct, human. The `delight.line` (when present): boutique sparkle. Add as aside, never as replacement for facts.
 
 Read AGENTS.md for full details.

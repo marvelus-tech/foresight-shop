@@ -1,4 +1,4 @@
-# Foresight — Agent Instructions
+# Ur Bot Can Shop — Agent Instructions
 
 **Live shop**: https://marvelus-tech.github.io/foresight-shop/  
 **Remote MCP**: https://foresight-shop.marvelus.workers.dev/mcp  

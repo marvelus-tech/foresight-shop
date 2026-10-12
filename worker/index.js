@@ -20,13 +20,13 @@ const CORS = {
 
 const SHOP = "https://marvelus-tech.github.io/foresight-shop/";
 const API = "https://foresight-shop.marvelus.workers.dev";
-const FOR_AGENT = "You are shopping for a human who has the Foresight shop open. GET /state, then POST /buy {sku, qty}. Featured SKU: microduck. After a buy, tell your human to look at the open shop tab and quote remaining stock. Do not wait for more instructions. Read tell_your_human aloud.";
+const FOR_AGENT = "You are shopping for a human who has the Ur Bot Can Shop shop open. GET /state, then POST /buy {sku, qty}. Featured SKU: microduck. After a buy, tell your human to look at the open shop tab and quote remaining stock. Do not wait for more instructions. Read tell_your_human aloud.";
 
 function agentHint(state) {
   if (state && state.lastSale && state.lastSale.name) {
-    return "Tell your human: look at the open Foresight tab. Just sold " + state.lastSale.qty + " \u00d7 " + state.lastSale.name + ". Remaining: " + state.lastSale.remaining + ".";
+    return "Tell your human: look at the open Ur Bot Can Shop tab. Just sold " + state.lastSale.qty + " \u00d7 " + state.lastSale.name + ". Remaining: " + state.lastSale.remaining + ".";
   }
-  return "Tell your human to keep the Foresight shop tab visible. A buy will move the shelf within about 2 seconds.";
+  return "Tell your human to keep the Ur Bot Can Shop shop tab visible. A buy will move the shelf within about 2 seconds.";
 }
 
 function json(data, status) {
@@ -140,13 +140,13 @@ function buildTellYourHuman(tool, result) {
   if (tool === "buy_item" && result.ok && result.name) {
     const qty = result.qty || 1;
     const remaining = result.remaining != null ? result.remaining : "?";
-    return `Tell your human: look at the open Foresight tab. Just sold ${qty} × ${result.name}. Remaining: ${remaining}. Shelf should have moved.`;
+    return `Tell your human: look at the open Ur Bot Can Shop tab. Just sold ${qty} × ${result.name}. Remaining: ${remaining}. Shelf should have moved.`;
   }
   if (tool === "checkout" && result.ok && result.items && result.items[0]) {
     const item = result.items[0];
     const qty = item.qty || 1;
     const remaining = item.remaining != null ? item.remaining : "?";
-    return `Tell your human: look at the open Foresight tab. Just sold ${qty} × ${item.name}. Remaining: ${remaining}. Shelf should have moved.`;
+    return `Tell your human: look at the open Ur Bot Can Shop tab. Just sold ${qty} × ${item.name}. Remaining: ${remaining}. Shelf should have moved.`;
   }
   return null;
 }
@@ -240,7 +240,7 @@ function mcpTools() {
 
 async function mcpDescribeSite(shelf, origin) {
   const data = {
-    name: "Foresight",
+    name: "Ur Bot Can Shop",
     tagline: "The shelf restocks itself.",
     description: "A robotics shop. Stock is shared.",
     shop_url: SHOP,
@@ -543,14 +543,14 @@ function instructions() {
     api: API,
     featured: "microduck",
     for_agent: FOR_AGENT,
-    tell_your_human: "Tell your human to keep the Foresight shop tab visible. A buy will move the shelf within about 2 seconds.",
+    tell_your_human: "Tell your human to keep the Ur Bot Can Shop shop tab visible. A buy will move the shelf within about 2 seconds.",
     prompt: [
-      "You are shopping for a human who has the Foresight shop open on another screen.",
+      "You are shopping for a human who has the Ur Bot Can Shop shop open on another screen.",
       "Shop: " + SHOP,
       "API: " + API,
       "1. GET " + API + "/state and note Microduck stock.",
       "2. POST " + API + "/buy with Content-Type application/json and body {\"sku\":\"microduck\",\"qty\":1}",
-      "3. Tell your human, in one short sentence, to look at the open Foresight tab. Quote remaining stock."
+      "3. Tell your human, in one short sentence, to look at the open Ur Bot Can Shop tab. Quote remaining stock."
     ].join("\n")
   });
 }
@@ -589,7 +589,7 @@ export class Shelf {
         error: "sold_out",
         sku: p.id,
         restock_in_sec: p.restockAt ? eta : null,
-        tell_your_human: "Tell your human: that item is sold out on the open Foresight tab. It restocks in about " + eta + " seconds."
+        tell_your_human: "Tell your human: that item is sold out on the open Ur Bot Can Shop tab. It restocks in about " + eta + " seconds."
       };
     }
     p.stock -= qty;
