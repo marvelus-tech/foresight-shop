@@ -302,7 +302,9 @@
       for (i = 0; i < cart.length; i++) {
         line = cart[i];
         p = products.find(function (x) { return x.id === line.sku; });
-        if (!p || p.stock < line.qty) {
+        var prepaid = line.prepaid || 0;
+        var need = Math.max(0, line.qty - prepaid);
+        if (!p || (need > 0 && p.stock < need)) {
           return {
             ok: false,
             error: "sold_out",
@@ -317,8 +319,12 @@
       for (i = 0; i < cart.length; i++) {
         line = cart[i];
         p = products.find(function (x) { return x.id === line.sku; });
-        p.stock -= line.qty;
-        if (p.stock < 0) p.stock = 0;
+        var prepaidLine = line.prepaid || 0;
+        var deduct = Math.max(0, line.qty - prepaidLine);
+        if (deduct > 0) {
+          p.stock -= deduct;
+          if (p.stock < 0) p.stock = 0;
+        }
         items.push({
           sku: p.id,
           name: p.name,
@@ -348,7 +354,13 @@
       if (p.stock < qty) return soldOutPayload(p);
       p.stock -= qty;
       if (p.stock < 0) p.stock = 0;
-      removeFromCart(p.id, qty);
+      var cartLine = cart.find(function (l) { return l.sku === p.id; });
+      if (cartLine) {
+        cartLine.qty += qty;
+        cartLine.prepaid = (cartLine.prepaid || 0) + qty;
+      } else {
+        cart.push({ sku: p.id, qty: qty, prepaid: qty });
+      }
       var order_id = nextOrderId();
       var item = {
         sku: p.id,

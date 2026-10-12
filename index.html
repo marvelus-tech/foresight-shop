@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Foresight — the shelf restocks itself</title>
-  <meta name="description" content="A robotics shop. The shelf restocks itself.">
+  <title>Ur Bot Can Shop — the shelf restocks itself</title>
+  <meta name="description" content="Ur Bot Can Shop: a robotics shelf demo. Stock moves when your agent buys.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,650&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
@@ -14,15 +14,16 @@
 <body>
   <a class="skip" href="#shelf">Skip to the shelf</a>
 
-  <header class="mast">
-    <p class="wordmark">Foresight</p>
-    <p class="mast-note">Prices in USD</p>
+  <header class="mast mast--shop">
+    <p class="wordmark">Ur Bot Can Shop</p>
     <p id="live-sale" class="live-sale" aria-live="polite"></p>
     <div class="mast-actions">
       <span id="mcp-chip" class="chip" data-state="fallback">Demo agent (fallback)</span>
-      <button type="button" id="cart-btn" class="cart-btn" aria-controls="bag-panel" aria-expanded="false">
-        Bag
-        <span id="cart-badge" class="badge" hidden>0</span>
+      <button type="button" id="cart-btn" class="cart-btn cart-fab" aria-controls="bag-panel" aria-expanded="false" aria-label="Bag">
+        <svg class="cart-icon" width="28" height="28" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path fill="currentColor" d="M7 4h-2l-1 2h2l3.6 7.59-1.35 2.45a2 2 0 0 0 1.79 2.86H19v-2H9.42a.25.25 0 0 1-.22-.37L9.1 14h7.45a2 2 0 0 0 1.79-1.11L21.33 6H7.21l-.7-2zm-1 16a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm10 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
+        </svg>
+        <span id="cart-badge" class="cart-count" hidden>0</span>
       </button>
       <button type="button" id="agent-open" class="text-btn" aria-controls="agent-panel" aria-expanded="false">Agent</button>
     </div>

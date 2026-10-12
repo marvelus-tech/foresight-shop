@@ -94,6 +94,26 @@ code {
   border-bottom: 1px solid var(--line);
 }
 
+.mast--shop {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.mast--shop .wordmark {
+  grid-column: 1;
+  font-size: clamp(1.05rem, 2.8vw, 1.35rem);
+}
+
+.mast--shop .live-sale {
+  grid-column: 1 / -1;
+  margin-top: -0.15rem;
+}
+
+.mast--shop .mast-actions {
+  grid-column: 2;
+  grid-row: 1;
+}
+
 .wordmark {
   font-family: Fraunces, "Times New Roman", serif;
   font-optical-sizing: auto;
@@ -173,29 +193,51 @@ code {
   min-width: 44px;
 }
 
+.cart-btn.cart-fab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  border: 0;
+  padding: 0.35rem 0.15rem 0.35rem 0.45rem;
+  min-width: auto;
+}
+
+.cart-icon {
+  flex-shrink: 0;
+  opacity: 0.92;
+}
+
 .cart-btn:hover,
 .cart-btn:focus-visible {
   border-color: rgba(26, 22, 18, 0.28);
 }
 
-.badge {
-  display: inline-block;
-  margin-left: 0.35rem;
-  min-width: 1.15rem;
-  padding: 0 0.28rem;
-  background: var(--rust);
-  color: var(--ink);
-  font-variant-numeric: tabular-nums;
-  font-size: 0.75rem;
-  line-height: 1.3;
-  text-align: center;
-  border-radius: 4px;
-  transform: scale(1);
-  transition: transform 180ms var(--ease);
+.cart-btn.cart-fab:hover .cart-icon,
+.cart-btn.cart-fab:focus-visible .cart-icon {
+  color: var(--rust);
 }
 
+.cart-count,
+.badge {
+  display: inline-block;
+  margin-left: 0.1rem;
+  min-width: 1.5rem;
+  padding: 0;
+  font-family: Fraunces, "Times New Roman", serif;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  font-size: 1.65rem;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-align: center;
+  color: var(--rust);
+  transform: scale(1);
+  transition: transform 200ms var(--ease);
+}
+
+.cart-count.is-tick,
 .badge.is-tick {
-  transform: scale(1.18);
+  transform: scale(1.14);
 }
 
 /* Pass to agent */

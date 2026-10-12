@@ -138,6 +138,35 @@
     if (btn) btn.setAttribute("data-count", String(cart.count || 0));
   }
 
+  function patchCardStock(sku) {
+    if (!sku) return;
+    var got = global.shop.get(sku);
+    if (!got.ok || !got.product) return;
+    var product = got.product;
+    var card = document.querySelector('.card[data-sku="' + String(sku).replace(/"/g, "") + '"]');
+    if (!card) return;
+    var sold = product.soldOut;
+    card.classList.toggle("is-sold", sold);
+    card.classList.toggle("is-arriving", !!product.restocking);
+    card.classList.toggle("is-new", !!product.newStock);
+    var countEl = card.querySelector(".stock .count");
+    if (countEl) countEl.textContent = String(product.stock);
+    var stockLine = card.querySelector(".stock");
+    if (stockLine && sold) stockLine.textContent = "Sold out";
+    var pips = card.querySelector(".pips");
+    if (pips) pips.innerHTML = stockPips(product);
+    var acts = card.querySelector(".acts");
+    if (acts) {
+      if (sold) {
+        acts.innerHTML = '<button type="button" class="buy" disabled>Sold out</button>';
+      } else {
+        acts.innerHTML =
+          '<button type="button" class="buy" data-act="buy">Buy</button>' +
+          '<button type="button" class="add" data-act="add">Add to bag</button>';
+      }
+    }
+  }
+
   function stockPips(product) {
     var html = "";
     var i;
@@ -280,12 +309,24 @@
     } else {
       result = global.ForesightTools.add_to_cart({ sku: sku, qty: 1 });
     }
-    if (result && result.ok) bumpCart();
+    if (result && result.ok) {
+      renderBadge();
+      bumpCart();
+      if (act === "buy") patchCardStock(sku);
+    }
   }
 
   function onShopChange(e) {
     var d = e.detail || {};
     if (d.reason === "remote" && (!d.changed || !d.changed.length)) return;
+    if (d.reason === "buy" && d.sku) {
+      patchCardStock(d.sku);
+      renderBadge();
+      bumpCart();
+    } else if (d.reason === "cart") {
+      renderBadge();
+      bumpCart();
+    }
     render();
     if (d.reason === "buy" && d.order_id) {
       lastReceipt = { ok: true, order_id: d.order_id, total: d.total };
@@ -396,6 +437,8 @@
 
   global.ForesightUI = {
     render: render,
+    renderBadge: renderBadge,
+    patchCardStock: patchCardStock,
     toast: toast,
     bumpCart: bumpCart,
     highlightCard: highlightCard,
