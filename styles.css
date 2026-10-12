@@ -95,8 +95,14 @@ code {
 }
 
 .mast--shop {
+  position: sticky;
+  top: 0;
+  z-index: 40;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
+  margin: -1.25rem -1.25rem 0;
+  padding: 1.25rem 1.25rem 0.9rem;
+  background: var(--paper);
 }
 
 .mast--shop .wordmark {

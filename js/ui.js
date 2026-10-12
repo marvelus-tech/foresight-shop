@@ -135,7 +135,13 @@
       badge.hidden = true;
       badge.textContent = "0";
     }
-    if (btn) btn.setAttribute("data-count", String(cart.count || 0));
+    if (btn) {
+      btn.setAttribute("data-count", String(cart.count || 0));
+      btn.setAttribute(
+        "aria-label",
+        cart.count > 0 ? "Bag, " + cart.count + " item" + (cart.count === 1 ? "" : "s") : "Bag"
+      );
+    }
   }
 
   function patchCardStock(sku) {
@@ -311,6 +317,7 @@
     }
     if (result && result.ok) {
       renderBadge();
+      renderBag();
       bumpCart();
       if (act === "buy") patchCardStock(sku);
     }
@@ -323,8 +330,9 @@
       patchCardStock(d.sku);
       renderBadge();
       bumpCart();
-    } else if (d.reason === "cart") {
+    } else if (d.reason === "cart" || d.reason === "checkout") {
       renderBadge();
+      renderBag();
       bumpCart();
     }
     render();

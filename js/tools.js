@@ -82,10 +82,11 @@
   function afterTool(name, args, result) {
     var view = ui();
     var sku = args && (args.sku || (result && result.data && result.data.sku));
-    if (view) {
+    if (view && result && result.ok) {
       if (sku) view.highlightCard(sku, { scroll: false });
       if (name === "add_to_cart" || name === "buy_item" || name === "checkout") {
         if (view.renderBadge) view.renderBadge();
+        if (view.renderBag) view.renderBag();
         view.bumpCart();
         if (sku && name === "buy_item" && view.patchCardStock) view.patchCardStock(sku);
       }
@@ -164,9 +165,10 @@
     var cartInfo = global.shop.getCart();
     var data = {
       sku: sku,
-      name: rawResult.name,
+      name: rawResult.added && rawResult.added.name ? rawResult.added.name : rawResult.name,
       qty: qty,
-      cart_total_items: cartInfo.items ? cartInfo.items.length : 0,
+      cart_count: cartInfo.count || 0,
+      cart_total_items: cartInfo.count || 0,
       cart_total: cartInfo.total || 0,
       currency: "AUD"
     };
